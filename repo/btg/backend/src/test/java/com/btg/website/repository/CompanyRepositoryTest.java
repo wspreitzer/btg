@@ -61,9 +61,9 @@ public class CompanyRepositoryTest {
 
 		when(addressRepo.findById(1L)).thenReturn(Optional.of(address));
 		address = addressRepo.findById(1L).get();
-		company = new Company("ABCC Corp", "John", "Doe", address, null, .05, "222-234-3453");
-		company2 = new Company("ABDEF Corp", "Jane", "Doe", address, address, .25, "222-222-3344");
-		company3 = new Company("Acme Corps", "Jack", "Mehoff", address, null, .30, "773-777-0128");
+		company = new Company("ABCC Corp", address, null, .05, "222-234-3453");
+		company2 = new Company("ABDEF Corp", address, address, .25, "222-222-3344");
+		company3 = new Company("Acme Corps", address, null, .30, "773-777-0128");
 		repository = setupRepository(company, company2, company3);
 	}
 
@@ -98,7 +98,7 @@ public class CompanyRepositoryTest {
 
 	@Test
 	public void savesCompanyToRepositorySuccessfully() throws Exception {
-		Company company = new Company("GHI", "Bob", "Smith", address, null, .45, "847-676-2644");
+		Company company = new Company("GHI", address, null, .45, "847-676-2644");
 		when(companyRepo.save(any(Company.class))).thenReturn(company);
 		Company newCompany = companyRepo.save(company);
 		assertThat(newCompany.getAddress().getStreet(), is("20 W 34th St"));
@@ -110,8 +110,8 @@ public class CompanyRepositoryTest {
 	@Test
 	public void savesMutipleCompaniesToRepositorySuccessfully() throws Exception {
 		List<Company> listOfCompaniesToSave = new ArrayList<Company>();
-		Company companyToSave = new Company("GHI", "Bob", "Smith", address, null, .45, "847-676-2644");
-		Company companyToSave2 = new Company("JKL", "Jane", "Smit", address, null, .50, "847-477-0911");
+		Company companyToSave = new Company("GHI", address, null, .45, "847-676-2644");
+		Company companyToSave2 = new Company("JKL", address, null, .50, "847-477-0911");
 		listOfCompaniesToSave.add(companyToSave);
 		listOfCompaniesToSave.add(companyToSave2);
 		when(companyRepo.saveAll(anyCollection())).thenReturn(listOfCompaniesToSave);
@@ -196,7 +196,7 @@ public class CompanyRepositoryTest {
 	public void returnsCompanyWhenCompanyNameEquals() throws Exception {
 		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company3));
 		results = companyRepo.findAll(
-				new BtgSpecification<Company>(new SearchCriteria("name", SearchOperation.EQUALITY, "Acme Corp")));
+				new BtgSpecification<Company>(new SearchCriteria("name", SearchOperation.EQUALITY, "Acme Corps")));
 		assertThat(results.size(), is(1));
 		assertThat(results, contains(company3));
 	}
@@ -223,7 +223,7 @@ public class CompanyRepositoryTest {
 	public void returnsCompanyWhenCompanyNameEndsWith() throws Exception {
 		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company3));
 		results = companyRepo
-				.findAll(new BtgSpecification<Company>(new SearchCriteria("name", SearchOperation.EQUALITY, "Corps")));
+				.findAll(new BtgSpecification<Company>(new SearchCriteria("name", SearchOperation.ENDS_WITH, "Corps")));
 		assertThat(results.size(), is(1));
 		assertThat(results, contains(company3));
 	}
@@ -263,6 +263,51 @@ public class CompanyRepositoryTest {
 		assertThat(results.size(), is(2));
 		assertThat(results, containsInAnyOrder(company2, company3));
 	}
+	
+	public void returnsCompanyWhenCompanyPhoneNumberEquals() throws Exception {
+		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company3));
+		results = companyRepo.findAll(
+				new BtgSpecification<Company>(new SearchCriteria("phoneNumber", SearchOperation.EQUALITY, "773-777-0128")));
+		assertThat(results.size(), is(1));
+		assertThat(results, contains(company3));
+	}
+
+	@Test
+	public void returnsCompanyWhenCompanyPhoneNumberBeginsWith() throws Exception {
+		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company, company2));
+		results = companyRepo
+				.findAll(new BtgSpecification<Company>(new SearchCriteria("phoneNumber", SearchOperation.STARTS_WITH, "222-")));
+		assertThat(results.size(), is(2));
+		assertThat(results, containsInAnyOrder(company, company2));
+	}
+
+	@Test
+	public void returnsCompanyWhenCompanyPhoneNumberContains() throws Exception {
+		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company, company2));
+		results = companyRepo
+				.findAll(new BtgSpecification<Company>(new SearchCriteria("phoneNumber", SearchOperation.CONTAINS, "34")));
+		assertThat(results.size(), is(2));
+		assertThat(results, containsInAnyOrder(company, company2));
+	}
+
+	@Test
+	public void returnsCompanyWhenCompanyPhoneNumberEndsWith() throws Exception {
+		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company3));
+		results = companyRepo
+				.findAll(new BtgSpecification<Company>(new SearchCriteria("phoneNumber", SearchOperation.ENDS_WITH, "0128")));
+		assertThat(results.size(), is(1));
+		assertThat(results, contains(company3));
+	}
+
+	@Test
+	public void returnsCompaniesWhenCompanyPhoneNumberDoesntEqual() throws Exception {
+		when(companyRepo.findAll(any(Specification.class))).thenReturn(setupRepository(company, company2, company3));
+		results = companyRepo
+				.findAll(new BtgSpecification<Company>(new SearchCriteria("phoneNumber", SearchOperation.NEGATION, "111-111-1111")));
+		assertThat(results.size(), is(3));
+		assertThat(results, containsInAnyOrder(company, company2, company3, company));
+	}
+
 
 	private List<Company> setupRepository(Company... companies) {
 		List<Company> companyList = new ArrayList<Company>();
