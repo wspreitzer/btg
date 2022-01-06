@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyCollection;
@@ -29,6 +30,7 @@ import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
+import com.mysql.cj.jdbc.result.ResultSetInternalMethods;
 
 public class AddressRepositoryTest {
 
@@ -213,6 +215,14 @@ public class AddressRepositoryTest {
 	}
 	
 	@Test
+	public void returnsAddressWhenCityEquals() throws Exception {
+		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address10));
+		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("city", SearchOperation.EQUALITY, "Dallas")));
+		assertThat(results.size(), is(1));
+		assertThat(results, contains(address10));
+	}
+	
+	@Test
 	public void returnsAddressWhenCityBeginsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address5, address6));
 		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("city", SearchOperation.STARTS_WITH, "New")));
@@ -220,6 +230,14 @@ public class AddressRepositoryTest {
 		assertThat(results, containsInAnyOrder(address5, address6));
 	}
 
+	@Test
+	public void returnsAddressWhenCityEndsWith() throws Exception {
+		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address7, address8, address9));
+		results = addressRepo.findAll(new BtgSpecification(new SearchCriteria("city", SearchOperation.ENDS_WITH, "ton")));
+		assertThat(results.size(), is(3));
+		assertThat(results, containsInAnyOrder(address7, address8, address9));
+	}
+	
 	@Test
 	public void returnsAddressWhenCityContains() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address3, address4));
@@ -249,6 +267,14 @@ public class AddressRepositoryTest {
 	}
 
 	@Test
+	public void returnsAddressWhenStreetEquals() throws Exception {
+		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address10));
+		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("street", SearchOperation.EQUALITY, "3700 Hogge Dr")));
+		assertThat(results.size(), is(1));
+		assertThat(results, contains(address10));
+	}
+	
+	@Test
 	public void returnsAddressWhenStreetBeginsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address7));
 		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("street", SearchOperation.STARTS_WITH, "1")));
@@ -256,6 +282,15 @@ public class AddressRepositoryTest {
 		assertThat(results, containsInAnyOrder(address, address2, address7));
 	}
 
+	@Test
+	public void returnsAddressWhenStreetEndsWith() throws Exception {
+		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address3,address5, address6, address9));
+		results = addressRepo.findAll(new BtgSpecification(new SearchCriteria("street", SearchOperation.ENDS_WITH, "st")));
+		assertThat(results.size(), is(4));
+		assertThat(results, containsInAnyOrder(address3,address5, address6, address9));
+	}
+	
+	
 	@Test
 	public void returnsAddressWhenStreetContains() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address3, address5, address6, address7));
@@ -275,6 +310,14 @@ public class AddressRepositoryTest {
 	}
 
 	@Test
+	public void returnsAddressWhenZipCodeEquals() throws Exception {
+		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address10));
+		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("zipCode", SearchOperation.EQUALITY, "75002")));
+		assertThat(results.size(), is(1));
+		assertThat(results, contains(address10));
+	}
+	
+	@Test
 	public void returnsAddressWhenZipCodeBeginsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address3, address4));
 		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("zipCode", SearchOperation.STARTS_WITH, "60")));
@@ -282,6 +325,14 @@ public class AddressRepositoryTest {
 		assertThat(results, containsInAnyOrder(address, address2, address3, address4));
 	}
 
+	@Test
+	public void returnsAddressWhenZipCodeEndsWith() throws Exception {
+		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address3, address4, address6));
+		results = addressRepo.findAll(new BtgSpecification(new SearchCriteria("zipCode", SearchOperation.ENDS_WITH, "6")));
+		assertThat(results.size(), is(3));
+		assertThat(results, containsInAnyOrder(address3, address4, address6));
+	}
+	
 	@Test
 	public void returnsAddressWhenZipCodeContains() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address3, address4));
