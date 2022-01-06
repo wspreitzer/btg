@@ -65,8 +65,8 @@ public class CustomerRepositoryTest {
 		when(stateRepo.findById(1L)).thenReturn(Optional.of(new State("Illinois", "IL")));
 		when(addressRepo.findById(1L)).thenReturn(Optional.of(new Address(null, null, state, null)));
 		when(addressRepo.findById(2L)).thenReturn(Optional.of(new Address(null, null, state, null)));
-		when(companyRepo.findById(1L)).thenReturn(Optional.of(new Company(null, null, null, address, address2, 0, null)));
-		when(companyRepo.findById(2L)).thenReturn(Optional.of(new Company(null, null, null, address, address2, 0, null)));
+		when(companyRepo.findById(1L)).thenReturn(Optional.of(new Company(null, address, address2, 0, null)));
+		when(companyRepo.findById(2L)).thenReturn(Optional.of(new Company(null, address, address2, 0, null)));
 		
 		state = stateRepo.findById(1L).get();
 		address = addressRepo.findById(1L).get();
