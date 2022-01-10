@@ -1,6 +1,7 @@
 package com.btg.website.model;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,11 +25,12 @@ public class Customer {
 	private String userName;
 	private String password;
 	private Date signupDate;
+	private List<WishList> wishList;
 
 	
 
 	public Customer(String firstName, String lastName, Address address, Address address2,  Company company, String email, String phoneNumber,
-			String userName, String password, Date signupDate) {
+			String userName, String password, Date signupDate, List<WishList> wishList) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -39,6 +41,7 @@ public class Customer {
 		this.userName = userName;
 		this.password = password;
 		this.signupDate = signupDate;
+		this.wishList = wishList;
 	}
 
 	public long getId() {
@@ -125,6 +128,14 @@ public class Customer {
 		this.signupDate = signupDate;
 	}
 
+	public List<WishList> getWishList() {
+		return this.wishList;
+	}
+	
+	public void setWishList(List<WishList> wishList) {
+		this.wishList = wishList;
+	}
+	
 	@Override
 	public int hashCode() {
 		return super.hashCode();
@@ -139,6 +150,4 @@ public class Customer {
 	public String toString() {
 		return super.toString();
 	}
-	
-	
 }

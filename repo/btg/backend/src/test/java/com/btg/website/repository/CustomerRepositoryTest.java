@@ -36,21 +36,9 @@ import com.btg.website.util.SearchOperation;
 public class CustomerRepositoryTest {
 
 	@MockBean
-	AddressRepository addressRepo;
-	
-	@MockBean
 	CustomerRepository customerRepo;
 	
-	@MockBean
-	CompanyRepository companyRepo;
-	
-	@MockBean
-	StateRepository stateRepo;
-	
 	private Customer customer, customer2, customer3, customer4;
-	private Address address, address2;
-	private Company company, company2;
-	private State state;
 	
 	List<Customer> repository;
 	List<Customer> results;
@@ -58,26 +46,10 @@ public class CustomerRepositoryTest {
 	@BeforeEach
 	public void setup() {
 		customerRepo = mock(CustomerRepository.class);
-		addressRepo = mock(AddressRepository.class);
-		companyRepo = mock(CompanyRepository.class);
-		stateRepo = mock(StateRepository.class);
-		
-		when(stateRepo.findById(1L)).thenReturn(Optional.of(new State("Illinois", "IL")));
-		when(addressRepo.findById(1L)).thenReturn(Optional.of(new Address(null, null, state, null)));
-		when(addressRepo.findById(2L)).thenReturn(Optional.of(new Address(null, null, state, null)));
-		when(companyRepo.findById(1L)).thenReturn(Optional.of(new Company(null, address, address2, 0, null)));
-		when(companyRepo.findById(2L)).thenReturn(Optional.of(new Company(null, address, address2, 0, null)));
-		
-		state = stateRepo.findById(1L).get();
-		address = addressRepo.findById(1L).get();
-		address2 = addressRepo.findById(2L).get();
-		company = companyRepo.findById(1L).get();
-		company2 = companyRepo.findById(2L).get();
-		
-		customer = new Customer("Bob", "Smith", address, null, null, "bob.smith@comcast.com", "222-805-2222", "user1", "p@ssword", new Date(System.currentTimeMillis()));
-		customer2 = new Customer("John", "smythe", address, null, null, "john.smythe@comcast.net", "312-781-1916", "user2", "Pword", new Date(System.currentTimeMillis()));
-		customer3 = new Customer("Jon", "Doe", address, address2, company, "jon.doe@company.com", "312-693-0103", "jdoe", "P@ssw0rd", new Date(System.currentTimeMillis()));
-		customer4 = new Customer("Tom", "Garcia", address, address2, company2, "tgarcia@company2.net", "773-805-3203", "tgarcia", "!P@ssW0rd", new Date(System.currentTimeMillis()));
+		customer = new Customer("Bob", "Smith", null, null, null, "bob.smith@comcast.com", "222-805-2222", "user1", "p@ssword", new Date(System.currentTimeMillis()), null);
+		customer2 = new Customer("John", "smythe", null, null, null, "john.smythe@comcast.net", "312-781-1916", "user2", "Pword", new Date(System.currentTimeMillis()), null);
+		customer3 = new Customer("Jon", "Doe", null, null, null, "jon.doe@company.com", "312-693-0103", "jdoe", "P@ssw0rd", new Date(System.currentTimeMillis()), null);
+		customer4 = new Customer("Tom", "Garcia", null, null, null, "tgarcia@company2.net", "773-805-3203", "tgarcia", "!P@ssW0rd", new Date(System.currentTimeMillis()), null);
 		
 		repository = setupRepository(customer, customer2, customer3, customer4);
 	}
@@ -108,11 +80,7 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	public void savesCustomerToRepositorySuccessfully() throws Exception {
-		when(addressRepo.findById(2L)).thenReturn(Optional.of(address2));
-		when(companyRepo.findById(1L)).thenReturn(Optional.of(company));
-		Address newCustomerAddress = addressRepo.findById(2L).get();
-		Company newCustomerCompany = companyRepo.findById(1L).get();
-		Customer customerToSave = new Customer("Bill","Clinton", newCustomerAddress, null, newCustomerCompany, "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password", new Date(System.currentTimeMillis()));
+		Customer customerToSave = new Customer("Bill","Clinton", null, null, null, "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password", new Date(System.currentTimeMillis()), null);
 		when(customerRepo.save(any(Customer.class))).thenReturn(customerToSave);
 		Customer newCustomer = customerRepo.save(customerToSave);
 		assertThat(newCustomer.getFirstName(), is("Bill"));
@@ -122,10 +90,8 @@ public class CustomerRepositoryTest {
 	@Test
 	public void savesMutipleCustomerToRepositorySuccessfully() throws Exception {
 		List<Customer> listOfCustomersToSave = new ArrayList<Customer>();
-		Address customerAddressToSave = new Address("5244 W Brummel", "Skokie", state, "60077");
-		Address customerAddressToSave2 = new Address("5701 W Oakton", "Skokie", state, "60077");
-		Customer customerToSave = new Customer("New", "Customer", customerAddressToSave, null, null, "customer@email.com", "212-456-7854", "user22", "password", new Date(System.currentTimeMillis()));
-		Customer customerToSave2 = new Customer("New2", "Customer2", customerAddressToSave2, null, null, "customer2@email.com", "847-452-3715", "user69", "password69", new Date(System.currentTimeMillis()));
+		Customer customerToSave = new Customer("New", "Customer", null, null, null, "customer@email.com", "212-456-7854", "user22", "password", new Date(System.currentTimeMillis()), null);
+		Customer customerToSave2 = new Customer("New2", "Customer2", null, null, null, "customer2@email.com", "847-452-3715", "user69", "password69", new Date(System.currentTimeMillis()), null);
 		
 		listOfCustomersToSave.add(customerToSave);
 		listOfCustomersToSave.add(customerToSave2);
