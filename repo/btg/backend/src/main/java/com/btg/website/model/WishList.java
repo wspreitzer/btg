@@ -1,11 +1,16 @@
 package com.btg.website.model;
 
 import java.sql.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class WishList {
@@ -13,35 +18,38 @@ public class WishList {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="customer_id", referencedColumnName = "id")
+	private Customer customer;
 	
-	private long productId;
-	
-	private long customerId;
+	@OneToMany(mappedBy = "PRODUCT", cascade = CascadeType.ALL, orphanRemoval = true )
+	private List<Product> products;
 	
 	private Date addedDate;
 	
 	public WishList() {}
 
-	public WishList(long customerId, long productId, Date addedDate) {
-		this.customerId = customerId;
-		this.productId = productId;
+	public WishList(Customer customer, List<Product> products, Date addedDate) {
+		this.customer = customer;
+		this.products = products;
 		this.addedDate = addedDate;
 	}
 
-	public long getProductId() {
-		return productId;
+	public List<Product> getProductId() {
+		return products;
 	}
 
-	public void setProductId(long productId) {
-		this.productId = productId;
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
 
-	public long getCustomerId() {
-		return customerId;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
+	public void setCustomerId(Customer customer) {
+		this.customer = customer;
 	}
 
 	public Date getAddedDate() {
@@ -69,7 +77,14 @@ public class WishList {
 	@Override
 	public String toString() {
 		return super.toString();
+	}	
+	
+	public void addProduct(Product product) {
+		products.add(product);
 	}
 	
-	
+	public void removeProduct(Product product) {
+		products.remove(product);
+		product.setWishList(null);
+	}
 }

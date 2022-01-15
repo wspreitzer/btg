@@ -26,6 +26,7 @@ public class Customer {
 	private String password;
 	private Date signupDate;
 	private List<WishList> wishList;
+	private List<CreditCard> creditCards;
 
 	
 
