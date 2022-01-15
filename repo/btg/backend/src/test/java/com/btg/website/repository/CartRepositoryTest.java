@@ -1,4 +1,4 @@
-package com.btg.website;
+package com.btg.website.repository;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
