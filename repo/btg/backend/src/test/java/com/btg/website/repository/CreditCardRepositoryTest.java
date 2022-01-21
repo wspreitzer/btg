@@ -41,10 +41,10 @@ public class CreditCardRepositoryTest {
 	@BeforeEach
 	public void setup() {
 		creditCardRepo = mock(CreditCardRepository.class);
-		creditCard = new CreditCard(1L, "Visa", "4242424242424242", "12/25", "123");
-		creditCard2 = new CreditCard(2L, "Master Card", "5200828282828210", "12/25", "558");
-		creditCard3 = new CreditCard(3L, "American Express", "354867813057915", "04/24", "7176");
-		creditCard4 = new CreditCard(4L, "Discover", "6011245599887744", "07/24", "855");
+		creditCard = new CreditCard(null, "Visa", "4242424242424242", "12/25", "123");
+		creditCard2 = new CreditCard(null, "Master Card", "5200828282828210", "12/25", "558");
+		creditCard3 = new CreditCard(null, "American Express", "354867813057915", "04/24", "7176");
+		creditCard4 = new CreditCard(null, "Discover", "6011245599887744", "07/24", "855");
 		repository = setupRepository(creditCard, creditCard2, creditCard3, creditCard4);
 	}
 	
@@ -68,7 +68,7 @@ public class CreditCardRepositoryTest {
 		Optional<CreditCard> foundCreditCard = creditCardRepo.findById(1L);
 		assertThat(true, is(foundCreditCard.isPresent()));
 		assertThat(foundCreditCard.get().getExpireDate(), is("12/25"));
-		assertThat(foundCreditCard.get().getCustomerId(), is(1L));
+		assertThat(foundCreditCard.get().getCustomer(), is(1L));
 		assertThat(foundCreditCard.get().getCvv(), is("123"));
 		assertThat(foundCreditCard.get().getType(), is("Visa"));
 		assertThat(foundCreditCard.get().getNumber(), is("4242424242424242"));
@@ -76,10 +76,9 @@ public class CreditCardRepositoryTest {
 	
 	@Test
 	public void savesCreditCardToRepositorySuccessfully() throws Exception {
-		CreditCard creditCardToSave = new CreditCard(5L,"Master Card","5555555555554444", "12/23", "069" );
+		CreditCard creditCardToSave = new CreditCard(null,"Master Card","5555555555554444", "12/23", "069" );
 		when(creditCardRepo.save(any(CreditCard.class))).thenReturn(creditCardToSave);
 		CreditCard newCreditCard = creditCardRepo.save(creditCardToSave);
-		assertThat(newCreditCard.getCustomerId(), is(5L));
 		assertThat(newCreditCard.getType(), is("Master Card"));
 		assertThat(newCreditCard.getNumber(), is("5555555555554444"));
 		assertThat(newCreditCard.getExpireDate(), is("12/23"));
@@ -89,8 +88,8 @@ public class CreditCardRepositoryTest {
 	@Test
 	public void savesMutipleCreditCardToRepositorySuccessfully() throws Exception {
 		List<CreditCard> listOfCreditCardsToSave = new ArrayList<CreditCard>();
-		CreditCard creditCardToSave = new CreditCard(5L,"Discover", "6011000990139424", "07/25", "069");
-		CreditCard creditCardToSave2 = new CreditCard(6L, "American Express", "371449635398431", "05/25", "7176");
+		CreditCard creditCardToSave = new CreditCard(null,"Discover", "6011000990139424", "07/25", "069");
+		CreditCard creditCardToSave2 = new CreditCard(null, "American Express", "371449635398431", "05/25", "7176");
 		
 		listOfCreditCardsToSave.add(creditCardToSave);
 		listOfCreditCardsToSave.add(creditCardToSave2);

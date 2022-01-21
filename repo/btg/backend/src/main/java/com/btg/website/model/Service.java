@@ -1,16 +1,24 @@
 package com.btg.website.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="Service_Table")
 public class Service {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@Column(name="name_of_service")
 	private String serviceName;
+	
+	@Column(name="service_description")
 	private String description;
 	private double price;
 	

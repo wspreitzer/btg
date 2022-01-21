@@ -3,10 +3,15 @@ package com.btg.website.model;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Customer {
@@ -15,27 +20,48 @@ public class Customer {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
+	@Column(name="first_name")
 	private String firstName;
+	
+	@Column(name="last_name")
 	private String lastName;
-	private Address address;
-	private Address address2;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "billing_address", referencedColumnName = "id")
+	private Address billingAddress;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="shipping_address", referencedColumnName = "id")
+	private Address shippingAddress;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "company_name", referencedColumnName = "id")
 	private Company company;
+	
 	private String email;
+	
+	@Column(name="phone_number")
 	private String phoneNumber;
 	private String userName;
 	private String password;
+	
+	@Column(name="sign_up_date")
 	private Date signupDate;
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WishList> wishList;
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CreditCard> creditCards;
 
 	
 
-	public Customer(String firstName, String lastName, Address address, Address address2,  Company company, String email, String phoneNumber,
-			String userName, String password, Date signupDate, List<WishList> wishList) {
+	public Customer(String firstName, String lastName, Address billingAddress, Address shippingAddress,  Company company, String email, String phoneNumber,
+			String userName, String password, Date signupDate, List<WishList> wishList, List<CreditCard> creditCards) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.address = address;
-		this.address2 = address2;
+		this.billingAddress = billingAddress;
+		this.shippingAddress = shippingAddress;
 		this.company = company;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
@@ -43,6 +69,7 @@ public class Customer {
 		this.password = password;
 		this.signupDate = signupDate;
 		this.wishList = wishList;
+		this.creditCards = creditCards;
 	}
 
 	public Long getId() {
@@ -66,19 +93,19 @@ public class Customer {
 	}
 
 	public Address getAddress() {
-		return this.address;
+		return this.billingAddress;
 	}
 	
 	public void setAddress(Address address) {
-		this.address = address;
+		this.billingAddress = address;
 	}
 	
 	public Address getAddress2() {
-		return this.address2;
+		return this.shippingAddress;
 	}
 	
 	public void setAddress2(Address address2) {
-		this.address2 = address2;
+		this.shippingAddress = address2;
 	}
 	
 	public Company getCompany() {

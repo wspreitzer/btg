@@ -44,15 +44,15 @@ public class OrderRepositoryTest {
 	public void setup() {
 		orderRepo = mock(OrderRepository.class);
 		order = new Order("btg-0111224566", new Date(System.currentTimeMillis()),
-					1L, null, 250.00, 25.00, 19.95, 294.95, "new");
+					null, null, 250.00, 25.00, 19.95, 294.95, "new");
 		order2 = new Order("2btg-0111224567", new Date(System.currentTimeMillis()),
-				    2L, null, 300.000, 30.000, 29.95, 359.95, "picking");
+				    null, null, 300.000, 30.000, 29.95, 359.95, "picking");
 		order3 = new Order("btg-0111224568", new Date(System.currentTimeMillis()),
-				    3L, null, 500.00, 50.00, 19.95, 569.95, "picked");
+				    null, null, 500.00, 50.00, 19.95, 569.95, "picked");
 		order4 = new Order("2btg-0111224569", new Date(System.currentTimeMillis()),
-				    4L, null, 100.000, 10.000, 0.000, 110.00, "loading");
+				    null, null, 100.000, 10.000, 0.000, 110.00, "loading");
 		order5 = new Order("btg-0111224570", new Date(System.currentTimeMillis()),
-				5L, null, 100.00, 10.00, 0.000, 110.00, "shipped");
+				null, null, 100.00, 10.00, 0.000, 110.00, "shipped");
 		repository = setupRepository(order, order2, order3, order4, order5);
 	}
 	
@@ -78,7 +78,6 @@ public class OrderRepositoryTest {
 		assertThat(true, is(foundOrder.isPresent()));
 		assertThat(foundOrder.get().getOrderNumber(), is("btg-0111224566"));
 		assertThat(foundOrder.get().getOrderDate(), is(order.getOrderDate()));
-		assertThat(foundOrder.get().getCustomerId(), is(1L));
 		assertThat(foundOrder.get().getOrderSubTotal(), is(250.00));
 		assertThat(foundOrder.get().getOrderTax(), is(25.00));
 		assertThat(foundOrder.get().getOrderShipping(), is(19.95));
@@ -89,12 +88,11 @@ public class OrderRepositoryTest {
 	@Test
 	public void savesOrderToRepositorySuccessfully() throws Exception {
 		Order orderToSave = new Order("btg-01111224577", new Date(System.currentTimeMillis()),
-				1L, null, 22.00, 2.20, 0.0, 24.20, "delivered");
+				null, null, 22.00, 2.20, 0.0, 24.20, "delivered");
 		when(orderRepo.save(any(Order.class))).thenReturn(orderToSave);
 		Order newOrder = orderRepo.save(orderToSave);
 		assertThat(newOrder.getOrderNumber(), is("btg-01111224577"));
 		assertThat(newOrder.getOrderDate(), is(orderToSave.getOrderDate()));
-		assertThat(newOrder.getCustomerId(), is(1L));
 		assertThat(newOrder.getOrderSubTotal(), is(22.00));
 		assertThat(newOrder.getOrderTax(), is(2.20));
 		assertThat(newOrder.getOrderShipping(), is(0.00));
@@ -106,9 +104,9 @@ public class OrderRepositoryTest {
 	public void savesMutipleOrderToRepositorySuccessfully() throws Exception {
 		List<Order> listOfOrdersToSave = new ArrayList<Order>();
 		Order orderToSave = new Order("btg-01111224577", new Date(System.currentTimeMillis()),
-				1L, null, 22.00, 2.20, 0.0, 24.20, "delivered");
+				null, null, 22.00, 2.20, 0.0, 24.20, "delivered");
 		Order orderToSave2 = new Order("btg-01111224578", new Date(System.currentTimeMillis()),
-				1L, null, 220.00, 22.00, 0.0, 244.00, "new");
+				null, null, 220.00, 22.00, 0.0, 244.00, "new");
 		
 		listOfOrdersToSave.add(orderToSave);
 		listOfOrdersToSave.add(orderToSave2);

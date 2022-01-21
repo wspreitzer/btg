@@ -45,9 +45,16 @@ public class SupportTicketRepositoryTest {
 		supportTicketRepo = mock(SupportTicketRepository.class);
 		//17,712,000,000
 		supportTicket = new SupportTicket("Customer ticket 1", "Customer reports website is down", new Date(86400000L), "opened", 1L);
+		System.out.println("This is 1 " + supportTicket.getCreationDate());
+		
 		supportTicket2 = new SupportTicket("My Ticket", "One more ticket", new Date(157680000000L), "opened", 2L);
+		System.out.println("This is 2 " + supportTicket2.getCreationDate());
+		
 		supportTicket3 = new SupportTicket("Your Ticket to finish", "A Ticket to finish", new Date(31536000000L), "opened", 3L);
+		System.out.println("This is 3 " + supportTicket3.getCreationDate());
+		
 		supportTicket4 = new SupportTicket("Support Ticket", "A Opened support ticket", new Date(206928000000L), "opened", 4L);
+		System.out.println("This is 4 " + supportTicket4.getCreationDate());
 		repository = setupRepository(supportTicket, supportTicket2, supportTicket3, supportTicket4);
 	}
 	

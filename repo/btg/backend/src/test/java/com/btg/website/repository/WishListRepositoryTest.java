@@ -47,9 +47,13 @@ public class WishListRepositoryTest {
 	public void setup() {
 		wishListRepo = mock(WishListRepository.class);
 		wishList = new WishList(null, null, new Date(31536000000L));
+		System.out.println(wishList.getAddedDate());
 		wishList2 = new WishList(null, null, new Date(157680000000L));
+		System.out.println(wishList2.getAddedDate());
 		wishList3 = new WishList(null, null, new Date(315360000000L));
+		System.out.println(wishList3.getAddedDate());
 		wishList4 = new WishList(null, null, new Date(473040000000L));
+		System.out.println(wishList4.getAddedDate());
 		repository = setupRepository(wishList, wishList2, wishList3, wishList4);
 		fmt = new SimpleDateFormat("MM/DD/YYYY");
 	}
@@ -82,8 +86,6 @@ public class WishListRepositoryTest {
 		WishList wishListToSave = new WishList(null,null, new Date(473040000000L));
 		when(wishListRepo.save(any(WishList.class))).thenReturn(wishListToSave);
 		WishList newWishList = wishListRepo.save(wishListToSave);
-		assertThat(newWishList.getCustomer(), is(5L));
-		assertThat(newWishList.getProductId(), is(5L));
 		assertThat(fmt.format(newWishList.getAddedDate()), is(formatDateAsString(newWishList.getAddedDate())));
 	}
 	

@@ -41,10 +41,10 @@ public class OrderLineItemRepositoryTest {
 	@BeforeEach
 	public void setup() {
 		orderLineItemRepo = mock(OrderLineItemRepository.class);
-		orderLineItem = new OrderLineItem(1L, 1L, 1, 19.95 );
-		orderLineItem2 = new OrderLineItem(1L, 2L, 2, 139.90);
-		orderLineItem3 = new OrderLineItem(1L, 3L, 3, 389.85);
-		orderLineItem4 = new OrderLineItem(1L, 4L, 4, 51.75);
+		orderLineItem = new OrderLineItem(null, null, 1, 19.95 );
+		orderLineItem2 = new OrderLineItem(null, null, 2, 139.90);
+		orderLineItem3 = new OrderLineItem(null, null, 3, 389.85);
+		orderLineItem4 = new OrderLineItem(null, null, 4, 51.75);
 		repository = setupRepository(orderLineItem, orderLineItem2, orderLineItem3, orderLineItem4);
 	}
 	
@@ -67,19 +67,15 @@ public class OrderLineItemRepositoryTest {
 	public void returnsOrderlineItemWhenIdIsFound() throws Exception {
 		when(orderLineItemRepo.findById(anyLong())).thenReturn(Optional.of(orderLineItem));
 		Optional<OrderLineItem> foundOrderLineItem = orderLineItemRepo.findById(1L);
-		assertThat(foundOrderLineItem.get().getOrderId(), is(1L));
-		assertThat(foundOrderLineItem.get().getProductId(), is(1L));
 		assertThat(foundOrderLineItem.get().getQty(), is(1));
 		assertThat(foundOrderLineItem.get().getLineTotal(), is(19.95));
 	}
 	
 	@Test
 	public void savesOrderLineItemToRepositorySuccessfully() throws Exception {
-		OrderLineItem orderLineItemToSave = new OrderLineItem(1L, 2, 20, 1390.00);
+		OrderLineItem orderLineItemToSave = new OrderLineItem(null, null, 20, 1390.00);
 		when(orderLineItemRepo.save(any(OrderLineItem.class))).thenReturn(orderLineItemToSave);
 		OrderLineItem newOrderLineItem = orderLineItemRepo.save(orderLineItemToSave);
-		assertThat(newOrderLineItem.getOrderId(), is(1L));
-		assertThat(newOrderLineItem.getProductId(), is(2L));
 		assertThat(newOrderLineItem.getQty(), is(20));
 		assertThat(newOrderLineItem.getLineTotal(), is(1390.00));
 	}
@@ -87,8 +83,8 @@ public class OrderLineItemRepositoryTest {
 	@Test
 	public void savesMutipleOrderLineItemToRepositorySuccessfully() throws Exception {
 		List<OrderLineItem> listOfOrderLineItemsToSave = new ArrayList<OrderLineItem>();
-		OrderLineItem orderLineItemToSave = new OrderLineItem(1L, 2L, 20, 1390.00);
-		OrderLineItem orderLineItemToSave2 = new OrderLineItem(1L ,2L, 10, 69.95);
+		OrderLineItem orderLineItemToSave = new OrderLineItem(null, null, 20, 1390.00);
+		OrderLineItem orderLineItemToSave2 = new OrderLineItem(null ,null, 10, 69.95);
 		
 		listOfOrderLineItemsToSave.add(orderLineItemToSave);
 		listOfOrderLineItemsToSave.add(orderLineItemToSave2);

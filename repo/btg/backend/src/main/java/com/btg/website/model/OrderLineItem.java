@@ -1,9 +1,14 @@
 package com.btg.website.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class OrderLineItem {
@@ -12,16 +17,21 @@ public class OrderLineItem {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	private long orderId;
-	private long productId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Order order;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="product_id", referencedColumnName = "id")
+	private Product product;
+	
 	private int qty;
 	private double lineTotal; 
 	
 	public OrderLineItem() {}
 	
-	public OrderLineItem(long orderId, long productId, int qty, double lineTotal) {
-		this.orderId = orderId;
-		this.productId = productId;
+	public OrderLineItem(Order order, Product product, int qty, double lineTotal) {
+		this.order = order;
+		this.product = product;
 		this.qty = qty;
 		this.lineTotal = lineTotal;
 	}
@@ -30,20 +40,20 @@ public class OrderLineItem {
 		return this.id;
 	}
 	
-	public long getOrderId() {
-		return this.orderId;
+	public Order getOrder() {
+		return this.order;
 	}
 	
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 	
-	public long getProductId() {
-		return this.productId;
+	public Product getProduct() {
+		return this.product;
 	}
 	
-	public void setProductId(long productId) {
-		this.productId = productId;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 	
 	public int getQty() {

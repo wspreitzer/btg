@@ -1,16 +1,21 @@
 package com.btg.website.model;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class CreditCard {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	private long customerId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Customer customer;
 	private String type;
 	private String number;
 	private String expireDate;
@@ -18,20 +23,20 @@ public class CreditCard {
 	
 	protected CreditCard() {}
 	
-	public CreditCard(long customerId, String type, String number, String expireDate, String cvv) {
-		this.customerId = customerId;
+	public CreditCard(Customer customer, String type, String number, String expireDate, String cvv) {
+		this.customer = customer;
 		this.type = type;
 		this.number = number;
 		this.expireDate = expireDate;
 		this.cvv = cvv;
 	}
 
-	public long getCustomerId() {
-		return customerId;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public String getType() {

@@ -3,12 +3,18 @@ package com.btg.website.model;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="order_table")
 public class Order {
 
 	@Id
@@ -17,8 +23,14 @@ public class Order {
 	
 	private String orderNumber;
 	private Date orderDate;
-	private long customerId;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customer_id", referencedColumnName = "id")
+	private Customer customer;
+	
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderLineItem> lineItems;
+	
 	private double orderSubTotal;
 	private double orderTax;
 	private double orderShipping;
@@ -27,12 +39,12 @@ public class Order {
 	
 	public Order() {}
 	
-	public Order(String orderNumber, Date orderDate, long customerId, 
+	public Order(String orderNumber, Date orderDate, Customer customer, 
 			List<OrderLineItem> lineItems, double orderSubTotal, double orderTax, 
 			double orderShipping, double orderTotal, String orderStatus) {
 		this.orderNumber = orderNumber;
 		this.orderDate = orderDate;
-		this.customerId = customerId;
+		this.customer = customer;
 		this.lineItems = lineItems;
 		this.orderSubTotal = orderSubTotal;
 		this.orderTax = orderTax;
@@ -89,12 +101,12 @@ public class Order {
 		this.orderTotal = orderTotal;
 	}
 	
-	public long getCustomerId() {
-		return customerId;
+	public Customer getCustomer() {
+		return customer;
 	}
 	
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 	
 	public List<OrderLineItem> getLineItems() {
