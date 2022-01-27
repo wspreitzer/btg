@@ -4,7 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,9 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.btg.website.assembler.CreditCardModelAssembler;
-import com.btg.website.errorhandling.ResourceNotFoundException;
+import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.CreditCard;
-import com.btg.website.model.Customer;
 import com.btg.website.repository.CreditCardRepository;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
@@ -40,10 +38,8 @@ import com.btg.website.util.SearchOperation;
 @RestController
 public class CreditCardRestController {
 	
-	private Customer customer;
 	private List<CreditCard> creditCards;
 	private BtgSpecificationBuilder<CreditCard> builder;
-	private BtgSpecificationBuilder<Customer> customerBuilder;
 	private final CreditCardModelAssembler assembler;
 	
 	@Autowired
@@ -60,7 +56,7 @@ public class CreditCardRestController {
 	
 	@GetMapping("/rest/creditCards/")
 	public CollectionModel<EntityModel<CreditCard>> getUserCreditCards() {
-		customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, "userName"))).get(0);
+		//customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, "userName"))).get(0);
 		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(new BtgSpecification<CreditCard>(new SearchCriteria("customer", SearchOperation.EQUALITY, 0))).stream().map(assembler::toModel).collect(Collectors.toList());
 		if (creditCards.size() > 0) {
 			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCards()).withSelfRel());
@@ -90,18 +86,23 @@ public class CreditCardRestController {
 			}
 		}
 		
-		Specification<CreditCard> spec = builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
+		Specification<CreditCard> spec =  builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
 		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(spec).stream().map(assembler::toModel).collect(Collectors.toList());
 		if(creditCards.size() > 0) {
 			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCardsBySpecification(search)).withSelfRel());
 		} else {
-			throw new ResourceNotFoundException("Credit Card", spec);
+			throw new ResourceNotFoundException("Credit Card", builder);
 		}
 	}
 	
 	@GetMapping("/rest/creditCards/count")
 	public ResponseEntity<Long> getCountOfUserCreditCards() {
-		customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, 0))).get(0);
+		/* 
+		 * TO DO Implement security context to get user to get userId to search for customer to get creditcards" 
+		 *	customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, 0))).get(0);
+		 */
+	
+		
 		creditCards = creditCardRepo.findAll(new BtgSpecification<CreditCard>(new SearchCriteria("customer", SearchOperation.EQUALITY, 0)));
 		if (creditCards.size() > 0) {
 			return new ResponseEntity<Long>((long) creditCards.size(), HttpStatus.OK);

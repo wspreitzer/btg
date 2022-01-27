@@ -1,12 +1,23 @@
-package com.btg.website.errorhandling;
+package com.btg.website.controller;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +46,6 @@ import com.btg.website.model.CreditCard;
 import com.btg.website.model.Customer;
 import com.btg.website.repository.CreditCardRepository;
 import com.btg.website.repository.CustomerRepository;
-import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.TestUtils;
 
@@ -55,14 +65,12 @@ public class CreditCardRestControllerTest {
 	@Autowired private WebApplicationContext webApplicationContext;
 	
 	private MockMvc mockedRequest;
-	private BtgSpecificationBuilder<CreditCard> builder;
 	private TestUtils<CreditCard> creditCardUtils;
 	private CreditCard card, card2, card3, card4, card5;
 	private List<CreditCard> creditCardList;
 	
 	@BeforeEach
 	public void setup() {
-		builder = new BtgSpecificationBuilder<CreditCard>();
 		creditCardUtils = new TestUtils<CreditCard>();
 		
 		card = new CreditCard(null, "Visa", "4242424242424242", "12","25", "123");
@@ -78,7 +86,7 @@ public class CreditCardRestControllerTest {
 		when(customerRepo.findAll(any(BtgSpecification.class))).thenReturn(customers);
 		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
-/*		 
+	 
 	@Test
 	public void returnsAllCustomersCreditCards() throws Exception {
 		when(creditCardRepo.findAll(any(Specification.class))).thenReturn(creditCardList);
@@ -130,26 +138,20 @@ public class CreditCardRestControllerTest {
 				.andExpect(jsonPath("$.cvv").value("555"));
 	}
 
-	@Test
-	public void returnsCreditCardCountWhenValidRequest() throws Exception {
-		when(creditCardRepo.findAll(any(Specification.class))).thenReturn(creditCardList);
-		MvcResult mvcResult = mockedRequest.perform(get("/rest/creditCards/count")
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
-		String[] cards = mvcResult.getResponse().getContentAsString().split("},");
-		ObjectMapper mapper = new ObjectMapper();
-		Arrays.asList(cards).forEach(aCard -> {
-			CreditCard myCard;
-			try {
-				myCard = mapper.readValue(aCard, CreditCard.class);
-				creditCardList.add(myCard);
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-		});
-		
-		assertThat(creditCardList.size(), is(4));
-	}	
+	/*
+	 * @Test public void returnsCreditCardCountWhenValidRequest() throws Exception {
+	 * when(creditCardRepo.findAll(any(Specification.class))).thenReturn(
+	 * creditCardList); MvcResult mvcResult =
+	 * mockedRequest.perform(get("/rest/creditCards/count")
+	 * .accept(MediaType.APPLICATION_JSON)) .andExpect(status().isOk()).andReturn();
+	 * String[] cards = mvcResult.getResponse().getContentAsString().split("},");
+	 * ObjectMapper mapper = new ObjectMapper(); Arrays.asList(cards).forEach(aCard
+	 * -> { CreditCard myCard; try { myCard = mapper.readValue(aCard,
+	 * CreditCard.class); creditCardList.add(myCard); } catch
+	 * (JsonProcessingException e) { e.printStackTrace(); } });
+	 * 
+	 * assertThat(creditCardList.size(), is(4)); }
+	 */
 
 	@Test
 	public void deleteCreditCardByIdWhenDeleteRequestIsValid() throws Exception {
@@ -420,7 +422,7 @@ public class CreditCardRestControllerTest {
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
-*/
+
 	@Test
 	public void returns404ErrorMessageWhenCreditCardNotFoundById() throws Exception{
 		when(creditCardRepo.findById(anyLong())).thenReturn(Optional.empty());
@@ -436,7 +438,7 @@ public class CreditCardRestControllerTest {
 		when(creditCardRepo.findAll(any(Specification.class))).thenReturn(new ArrayList<CreditCard>());
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/rest/creditCardsBySpecification/")
-						.param("search", "type:Diners Club")
+						.param("search", "type:DinersClub")
 						.accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isNotFound()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
