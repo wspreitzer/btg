@@ -25,13 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.btg.website.assembler.CreditCardModelAssembler;
 import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.CreditCard;
 import com.btg.website.repository.CreditCardRepository;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
+import com.btg.website.util.CreditCardModelAssembler;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
