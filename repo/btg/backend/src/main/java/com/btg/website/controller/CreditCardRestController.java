@@ -1,14 +1,32 @@
 package com.btg.website.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.btg.website.assembler.CreditCardModelAssembler;
 import com.btg.website.errorhandling.ResourceNotFoundException;
 import com.btg.website.model.CreditCard;
 import com.btg.website.model.Customer;
@@ -17,40 +35,92 @@ import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
+import com.btg.website.util.SearchOperation;
 
-@Controller
-public class CreditCardRestController extends BtgRestController<CreditCard> {
-
+@RestController
+public class CreditCardRestController {
 	
-	private BtgSpecificationBuilder<CreditCard> builder = new BtgSpecificationBuilder<>();
+	private Customer customer;
+	private List<CreditCard> creditCards;
+	private BtgSpecificationBuilder<CreditCard> builder;
+	private BtgSpecificationBuilder<Customer> customerBuilder;
+	private final CreditCardModelAssembler assembler;
 	
 	@Autowired
 	private CustomerRepository customerRepo;
 	
 	@Autowired
 	private CreditCardRepository creditCardRepo;
+
+	@Autowired
+	public CreditCardRestController(CreditCardModelAssembler assembler) {
+		builder = new BtgSpecificationBuilder<CreditCard>();
+		this.assembler = assembler;
+	}
 	
-	@GetMapping("/rest/creditcards/{type}")
-	public ResponseEntity<List<CreditCard>> getUsersCreditCardsByType(@PathVariable String type) {
-		List<CreditCard> creditCards = creditCardRepo.findAll(builder.with("type", ":", type, "", "").build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria)));
-		if (creditCards != null) {
-			return new ResponseEntity<List<CreditCard>>(creditCards, HttpStatus.OK);
+	@GetMapping("/rest/creditCards/")
+	public CollectionModel<EntityModel<CreditCard>> getUserCreditCards() {
+		customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, "userName"))).get(0);
+		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(new BtgSpecification<CreditCard>(new SearchCriteria("customer", SearchOperation.EQUALITY, 0))).stream().map(assembler::toModel).collect(Collectors.toList());
+		if (creditCards.size() > 0) {
+			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCards()).withSelfRel());
 		} else {
 			throw new ResourceNotFoundException();
 		}
 	}
 	
-	@GetMapping("/rest/creditcards/{username}")
-	public ResponseEntity<List<CreditCard>> getUsersCreditCards(@PathVariable String username) {
-		BtgSpecificationBuilder<Customer> customerBuilder = new BtgSpecificationBuilder<Customer>();
-		List<Customer> customers = customerRepo.findAll(customerBuilder.with("userName", ":", username, "", "").build(searchCriteria -> new BtgSpecification<Customer>((SearchCriteria) searchCriteria )));
-		List<CreditCard> creditCards = creditCardRepo.findAll(builder.with("customerId", ":", customers.get(0).getId(), "", "").build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria)));
+	@GetMapping("/rest/creditCard/{id}")
+	public EntityModel<CreditCard> getCreditCardById(@PathVariable Long id) {
+		CreditCard card = creditCardRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Credit Card", id));
+		return assembler.toModel(card);
+	}
+
+	@GetMapping("/rest/creditCardsBySpecification/")
+	public CollectionModel<EntityModel<CreditCard>> getUserCreditCardsBySpecification(@RequestParam(value="search") String search) throws Exception {
+		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+		Matcher matcher = pattern.matcher(search + ",");
+		builder.with("customer", ":", 0, "", "");
+		while (matcher.find()) {
+			if(matcher.groupCount() == 3) {
+				builder.with(matcher.group(1), matcher.group(2), "", matcher.group(3), "");
+			} else if (matcher.groupCount() == 5) {
+				builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
+			} else {
+				throw new Exception();
+			}
+		}
 		
-		if (creditCards != null) {
-			return new ResponseEntity<List<CreditCard>>(creditCards, HttpStatus.OK);
+		Specification<CreditCard> spec = builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
+		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(spec).stream().map(assembler::toModel).collect(Collectors.toList());
+		if(creditCards.size() > 0) {
+			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCardsBySpecification(search)).withSelfRel());
 		} else {
-			System.out.println("HOLY SHIT WE MADE IT HERE!!!!");
+			throw new ResourceNotFoundException("Credit Card", spec);
+		}
+	}
+	
+	@GetMapping("/rest/creditCards/count")
+	public ResponseEntity<Long> getCountOfUserCreditCards() {
+		customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, 0))).get(0);
+		creditCards = creditCardRepo.findAll(new BtgSpecification<CreditCard>(new SearchCriteria("customer", SearchOperation.EQUALITY, 0)));
+		if (creditCards.size() > 0) {
+			return new ResponseEntity<Long>((long) creditCards.size(), HttpStatus.OK);
+		} else {
 			throw new ResourceNotFoundException();
 		}
+	}
+	
+	@PostMapping(value = "/rest/creditCard")
+	public CreditCard createAccount(@RequestBody CreditCard creditCard, HttpServletResponse response, HttpServletRequest request) {
+		CreditCard savedCreditCard = creditCardRepo.save(creditCard);
+		response.setStatus(HttpStatus.CREATED.value());
+		response.setHeader("Location", String.format("%s/rest/creditCards/%s", request.getContextPath(), savedCreditCard.getId(), null));
+		return savedCreditCard;
+	}
+	
+	@DeleteMapping("/rest/creditCards/{id}")
+	public ResponseEntity<List<CreditCard>> deleteCustomerCreditCardById(@PathVariable Long id, HttpServletResponse response, HttpServletRequest request) {
+		creditCardRepo.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 }

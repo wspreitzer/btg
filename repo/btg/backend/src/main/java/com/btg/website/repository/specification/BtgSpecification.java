@@ -19,6 +19,10 @@ public class BtgSpecification<T> implements Specification<T> {
 		this.criteria = criteria;
 	}
 	
+	public SearchCriteria getCriteria() {
+		return this.criteria;
+	}
+	
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 		Predicate retVal;

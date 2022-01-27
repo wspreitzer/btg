@@ -72,10 +72,15 @@ public class Customer {
 		this.creditCards = creditCards;
 	}
 
+	public Customer() {}
+
 	public Long getId() {
 		return this.id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getFirstName() {
 		return this.firstName;
 	}

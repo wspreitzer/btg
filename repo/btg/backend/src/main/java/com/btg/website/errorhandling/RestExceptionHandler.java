@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.btg.website.controller.AccountNotFoundException;
+
 
 
 public class RestExceptionHandler extends ResponseEntityExceptionHandler{
@@ -58,6 +60,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 				.build();
 		return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), request);
 	}
+
+	public ResponseEntity<Object> handleResourceNotFound(AccountNotFoundException ex, WebRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	private ApiPropertyError toPropertyError(ConstraintViolation<?> violation) {
 		return ApiPropertyError.builder()
@@ -74,4 +81,5 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 				.invalidValue(fieldError.getRejectedValue())
 				.build();
 	}
+
 }

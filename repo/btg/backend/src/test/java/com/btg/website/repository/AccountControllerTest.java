@@ -27,6 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.WebsiteApplication;
 import com.btg.website.config.JacksonConfig;
+import com.btg.website.controller.InvalidAccountRequestException;
 import com.btg.website.model.Account;
 
 @ExtendWith(SpringExtension.class)
@@ -39,7 +40,6 @@ public class AccountControllerTest {
 	
 	@Autowired
 	private WebApplicationContext webApplicationContext;
-	
 	@MockBean
 	private AccountService accountServiceMock;
 	
@@ -68,7 +68,6 @@ public class AccountControllerTest {
 	
 	@Test
 	public void should_GetAccount_When_ValidRequest() throws Exception {
-		Account account = new Account(12345L, "SAVINGS", 5000.0);
 		when(accountServiceMock.getById(12345L)).thenReturn(account);
 		mockMvc.perform(get("/api/account/12345")
 				.accept(MediaType.APPLICATION_JSON))
@@ -79,10 +78,28 @@ public class AccountControllerTest {
 	}
 	
 	@Test
+	public void should_Return400_When_InvalidAccountRequest() throws Exception {
+		when(accountServiceMock.getById(12345L)).thenThrow(new InvalidAccountRequestException());
+		mockMvc.perform(get("/api/account/12345")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(status().is4xxClientError());
+	}
+	
+	
+	@Test
 	public void should_Return404_When_AccountNotFound() throws Exception {
 		when(accountServiceMock.getById(12345L)).thenReturn(null);
 		mockMvc.perform(get("/api/account/12345")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void should_Return500_When_Internal_Server_Exception_Is_Thrown() throws Exception {
+		when(accountServiceMock.getById(12345L)).thenThrow(new NullPointerException());
+		mockMvc.perform(get("/api/account/12345")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().is5xxServerError());
 	}
 }

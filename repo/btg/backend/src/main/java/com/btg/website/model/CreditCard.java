@@ -17,17 +17,20 @@ public class CreditCard {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Customer customer;
 	private String type;
+	
 	private String number;
-	private String expireDate;
+	private String exMon;
+	private String exYr;
 	private String cvv;
 	
-	protected CreditCard() {}
+	public CreditCard() {}
 	
-	public CreditCard(Customer customer, String type, String number, String expireDate, String cvv) {
+	public CreditCard(Customer customer, String type, String number, String exMon, String exYr, String cvv) {
 		this.customer = customer;
 		this.type = type;
 		this.number = number;
-		this.expireDate = expireDate;
+		this.exMon = exMon;
+		this.exYr = exYr;
 		this.cvv = cvv;
 	}
 
@@ -55,12 +58,20 @@ public class CreditCard {
 		this.number = number;
 	}
 
-	public String getExpireDate() {
-		return expireDate;
+	public String getExMon() {
+		return exMon;
 	}
 
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
+	public void setExMon(String exMon) {
+		this.exMon = exMon;
+	}
+	
+	public String getExYr() {
+		return exYr;
+	}
+	
+	public void setExYr(String exYr) {
+		this.exYr = exYr;
 	}
 
 	public String getCvv() {

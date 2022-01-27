@@ -1,5 +1,5 @@
 package com.btg.website.controller;
 
-public class InvalidAccountRequestException extends Exception {
+public class InvalidAccountRequestException extends RuntimeException {
 
 }
