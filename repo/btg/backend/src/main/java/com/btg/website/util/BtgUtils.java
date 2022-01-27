@@ -1,7 +1,5 @@
 package com.btg.website.util;
 
-import javax.persistence.Entity;
-
 import com.btg.website.repository.specification.BtgSpecification;
 
 public class BtgUtils {

@@ -1,6 +1,5 @@
-package com.btg.website.errorhandling;
+package com.btg.website.exception;
 
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -19,7 +18,7 @@ public class ResourceNotFoundException extends RuntimeException {
 		super(BtgUtils.createExceptionMessage(entity, id));
 	}
 	
-	public ResourceNotFoundException(String entity, Specification<?> spec) {
-		super(BtgUtils.createExceptionMessage(entity, (BtgSpecification<?>) spec));
+	public ResourceNotFoundException(String entity, BtgSpecification<?> spec) {
+		super(BtgUtils.createExceptionMessage(entity,  spec));
 	}
 }

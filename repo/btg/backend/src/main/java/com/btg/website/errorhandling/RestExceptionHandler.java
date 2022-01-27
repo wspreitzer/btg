@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.btg.website.controller.AccountNotFoundException;
+import com.btg.website.exception.ResourceNotFoundException;
 
 
 
@@ -61,7 +61,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), request);
 	}
 
-	public ResponseEntity<Object> handleResourceNotFound(AccountNotFoundException ex, WebRequest request) {
+	public ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}

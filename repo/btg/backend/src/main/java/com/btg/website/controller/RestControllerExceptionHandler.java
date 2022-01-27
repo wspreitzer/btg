@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
-import com.btg.website.errorhandling.ResourceNotFoundException;
 import com.btg.website.errorhandling.RestExceptionHandler;
+import com.btg.website.exception.InvalidRequestException;
+import com.btg.website.exception.ResourceNotFoundException;
 
 @ControllerAdvice
 public class RestControllerExceptionHandler {
@@ -45,8 +46,8 @@ public class RestControllerExceptionHandler {
 	}
 	
 	@ResponseStatus(BAD_REQUEST)
-	@ExceptionHandler(InvalidAccountRequestException.class)
-	public void handleBadRequest(InvalidAccountRequestException ex) {
+	@ExceptionHandler(InvalidRequestException.class)
+	public void handleBadRequest(InvalidRequestException ex) {
 		System.out.println("Invalid account supplied in request");
 		ex.printStackTrace();
 	}
