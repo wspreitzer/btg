@@ -7,7 +7,7 @@ import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 
 @Controller
-@RequestMapping("/v1")
+@RequestMapping("/btg")
 public class BtgController<T> {
 	
 	protected BtgSpecification<T> spec;
