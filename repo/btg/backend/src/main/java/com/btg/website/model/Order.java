@@ -35,22 +35,25 @@ public class Order {
 	private double orderTax;
 	private double orderShipping;
 	private double orderTotal;
-	private String orderStatus;
+	private Status orderStatus;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "card_id", referencedColumnName = "id")
+	private CreditCard card;
 	
 	public Order() {}
 	
-	public Order(String orderNumber, Date orderDate, Customer customer, 
+	public Order(String orderNumber, Customer customer, 
 			List<OrderLineItem> lineItems, double orderSubTotal, double orderTax, 
-			double orderShipping, double orderTotal, String orderStatus) {
+			double orderShipping, double orderTotal, CreditCard card) {
 		this.orderNumber = orderNumber;
-		this.orderDate = orderDate;
 		this.customer = customer;
 		this.lineItems = lineItems;
 		this.orderSubTotal = orderSubTotal;
 		this.orderTax = orderTax;
 		this.orderShipping = orderShipping;
 		this.orderTotal = orderTotal;
-		this.orderStatus = orderStatus;
+		this.card = card;
 	}
 	
 	public String getOrderNumber() {
@@ -117,15 +120,27 @@ public class Order {
 		this.lineItems = lineItems;
 	}
 	
-	public String getOrderStatus() {
+	public CreditCard getCard() {
+		return card;
+	}
+	
+	public void setCard(CreditCard card) {
+		this.card = card; 
+	}
+	
+	public Status getOrderStatus() {
 		return orderStatus;
 	}
 	
-	public void setOrderStatus(String orderStatus) {
+	public void setOrderStatus(Status orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 	
 	public long getId() {
 		return id;
+	}
+
+	public void setOrderId(Long id) {
+		this.id = id;
 	}
 }
