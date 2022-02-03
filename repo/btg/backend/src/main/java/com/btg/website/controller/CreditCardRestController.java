@@ -36,17 +36,12 @@ import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
 @RestController
-public class CreditCardRestController {
+public class CreditCardRestController extends BtgRestController<CreditCard> {
 	
 	private List<CreditCard> creditCards;
-	private BtgSpecificationBuilder<CreditCard> builder;
 	private final CreditCardModelAssembler assembler;
 	
-	@Autowired
-	private CustomerRepository customerRepo;
-	
-	@Autowired
-	private CreditCardRepository creditCardRepo;
+	@Autowired private CreditCardRepository creditCardRepo;
 
 	@Autowired
 	public CreditCardRestController(CreditCardModelAssembler assembler) {
@@ -115,7 +110,7 @@ public class CreditCardRestController {
 	public CreditCard createAccount(@RequestBody CreditCard creditCard, HttpServletResponse response, HttpServletRequest request) {
 		CreditCard savedCreditCard = creditCardRepo.save(creditCard);
 		response.setStatus(HttpStatus.CREATED.value());
-		response.setHeader("Location", String.format("%s/rest/creditCards/%s", request.getContextPath(), savedCreditCard.getId(), null));
+		response.setHeader("Location", String.format("%s/btg/rest/creditCards/%s", request.getContextPath(), savedCreditCard.getId(), null));
 		return savedCreditCard;
 	}
 	

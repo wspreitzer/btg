@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.hateoas.CollectionModel;
@@ -142,13 +145,14 @@ public class OrderRestController extends BtgRestController<Order> {
 	}
 
 	@PostMapping("/rest/orders")
-	public ResponseEntity<EntityModel<Order>> saveOrder(@RequestBody Order order) {
+	public ResponseEntity<EntityModel<Order>> saveOrder(@RequestBody Order order, HttpServletResponse response, HttpServletRequest request) {
 		order.setOrderStatus(Status.NEW);
 		order.setOrderDate(new Date(System.currentTimeMillis()));
 		Order newOrder = orderRepo.save(order);
 
 		return ResponseEntity
 				.created(linkTo(methodOn(OrderRestController.class).getCustomerOrdersById(newOrder.getId())).toUri())
+				.header("Location", String.format("%s/btg/rest/orders/%s", request.getContextPath(), newOrder.getId(), null))
 				.body(assembler.toModel(newOrder));
 	}
 
