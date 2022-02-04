@@ -6,7 +6,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
-
+import org.springframework.stereotype.Component;
 import com.btg.website.util.SearchCriteria;
 
 public class BtgSpecification<T> implements Specification<T> {
@@ -16,6 +16,10 @@ public class BtgSpecification<T> implements Specification<T> {
 	
 	public BtgSpecification(final SearchCriteria criteria) {
 		this.criteria = criteria;
+	}
+	
+	public SearchCriteria getCriteria() {
+		return this.criteria;
 	}
 	
 	@Override
