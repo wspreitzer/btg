@@ -6,11 +6,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
-
+import org.springframework.stereotype.Component;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@Component
 public class BtgSpecificationBuilder<T> {
 private List<SearchCriteria> params;
 	
@@ -36,6 +37,10 @@ private List<SearchCriteria> params;
 		}
 		params.add(new SearchCriteria(orIndicator, key, op, value));
 		return this;
+	}
+	
+	public List<SearchCriteria> getParams() {
+		return params;
 	}
 	
 	public BtgSpecificationBuilder<T> with(final String key, final String operation, final Object value, 
