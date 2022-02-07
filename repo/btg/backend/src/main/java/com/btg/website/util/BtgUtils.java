@@ -1,13 +1,8 @@
 package com.btg.website.util;
 
-import com.btg.website.repository.builder.BtgSpecificationBuilder;
-
-public class BtgUtils {
-	
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.btg.website.exception.InvalidRequestException;
@@ -61,6 +56,4 @@ public class BtgUtils {
 		}
 		return builder;
 	}
-
-
 }
