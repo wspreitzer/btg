@@ -46,10 +46,10 @@ public class WishListRepositoryTest {
 	@BeforeEach
 	public void setup() {
 		wishListRepo = mock(WishListRepository.class);
-		wishList = new WishList(1L, 1L, new Date(31536000000L));
-		wishList2 = new WishList(2L, 2L, new Date(157680000000L));
-		wishList3 = new WishList(3L, 3L, new Date(315360000000L));
-		wishList4 = new WishList(4L, 4L, new Date(473040000000L));
+		wishList = new WishList(null, null, new Date(31536000000L));
+		wishList2 = new WishList(null, null, new Date(157680000000L));
+		wishList3 = new WishList(null, null, new Date(315360000000L));
+		wishList4 = new WishList(null, null, new Date(473040000000L));
 		repository = setupRepository(wishList, wishList2, wishList3, wishList4);
 		fmt = new SimpleDateFormat("MM/DD/YYYY");
 	}
@@ -79,10 +79,9 @@ public class WishListRepositoryTest {
 
 	@Test
 	public void savesWishListToRepositorySuccessfully() throws Exception {
-		WishList wishListToSave = new WishList(5L,5L, new Date(473040000000L));
+		WishList wishListToSave = new WishList(null,null, new Date(473040000000L));
 		when(wishListRepo.save(any(WishList.class))).thenReturn(wishListToSave);
 		WishList newWishList = wishListRepo.save(wishListToSave);
-		assertThat(newWishList.getCustomerId(), is(5L));
 		assertThat(newWishList.getProductId(), is(5L));
 		assertThat(fmt.format(newWishList.getAddedDate()), is(formatDateAsString(newWishList.getAddedDate())));
 	}
@@ -91,8 +90,8 @@ public class WishListRepositoryTest {
 	public void savesMutipleWishListToRepositorySuccessfully() throws Exception {
 		List<WishList> listOfWishListsToSave = new ArrayList<WishList>();
 		
-		WishList wishListToSave = new WishList(5L,5L, new Date(473040000000L));
-		WishList wishListToSave2 = new WishList(6L,6L, new Date(473040000000L));
+		WishList wishListToSave = new WishList(null,null, new Date(473040000000L));
+		WishList wishListToSave2 = new WishList(null,null, new Date(473040000000L));
 		listOfWishListsToSave.add(wishListToSave);
 		listOfWishListsToSave.add(wishListToSave2);
 		when(wishListRepo.saveAll(anyCollection())).thenReturn(listOfWishListsToSave);

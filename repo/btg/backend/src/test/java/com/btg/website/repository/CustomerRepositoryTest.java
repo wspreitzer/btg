@@ -59,10 +59,10 @@ public class CustomerRepositoryTest {
 	@BeforeEach
 	public void setup() {
 		customerRepo = mock(CustomerRepository.class);
-		customer = new Customer("Bob", "Smith", null, null, null, "bob.smith@comcast.com", "222-805-2222", "user1", "p@ssword", new Date(System.currentTimeMillis()), null);
-		customer2 = new Customer("John", "smythe", null, null, null, "john.smythe@comcast.net", "312-781-1916", "user2", "Pword", new Date(System.currentTimeMillis()), null);
-		customer3 = new Customer("Jon", "Doe", null, null, null, "jon.doe@company.com", "312-693-0103", "jdoe", "P@ssw0rd", new Date(System.currentTimeMillis()), null);
-		customer4 = new Customer("Tom", "Garcia", null, null, null, "tgarcia@company2.net", "773-805-3203", "tgarcia", "!P@ssW0rd", new Date(System.currentTimeMillis()), null);
+		customer = new Customer("Bob", "Smith", null, null, null, "bob.smith@comcast.com", "222-805-2222", "user1", "p@ssword", new Date(System.currentTimeMillis()), null, null);
+		customer2 = new Customer("John", "smythe", null, null, null, "john.smythe@comcast.net", "312-781-1916", "user2", "Pword", new Date(System.currentTimeMillis()), null, null);
+		customer3 = new Customer("Jon", "Doe", null, null, null, "jon.doe@company.com", "312-693-0103", "jdoe", "P@ssw0rd", new Date(System.currentTimeMillis()), null, null);
+		customer4 = new Customer("Tom", "Garcia", null, null, null, "tgarcia@company2.net", "773-805-3203", "tgarcia", "!P@ssW0rd", new Date(System.currentTimeMillis()), null, null);
 		
 		repository = setupRepository(customer, customer2, customer3, customer4);
 	}
@@ -93,7 +93,7 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	public void savesCustomerToRepositorySuccessfully() throws Exception {
-		Customer customerToSave = new Customer("Bill","Clinton", null, null, null, "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password", new Date(System.currentTimeMillis()), null);
+		Customer customerToSave = new Customer("Bill","Clinton", null, null, null, "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password", new Date(System.currentTimeMillis()), null, null);
 		when(customerRepo.save(any(Customer.class))).thenReturn(customerToSave);
 		Customer newCustomer = customerRepo.save(customerToSave);
 		assertThat(newCustomer.getFirstName(), is("Bill"));
@@ -103,8 +103,8 @@ public class CustomerRepositoryTest {
 	@Test
 	public void savesMutipleCustomerToRepositorySuccessfully() throws Exception {
 		List<Customer> listOfCustomersToSave = new ArrayList<Customer>();
-		Customer customerToSave = new Customer("New", "Customer", null, null, null, "customer@email.com", "212-456-7854", "user22", "password", new Date(System.currentTimeMillis()), null);
-		Customer customerToSave2 = new Customer("New2", "Customer2", null, null, null, "customer2@email.com", "847-452-3715", "user69", "password69", new Date(System.currentTimeMillis()), null);
+		Customer customerToSave = new Customer("New", "Customer", null, null, null, "customer@email.com", "212-456-7854", "user22", "password", new Date(System.currentTimeMillis()), null, null);
+		Customer customerToSave2 = new Customer("New2", "Customer2", null, null, null, "customer2@email.com", "847-452-3715", "user69", "password69", new Date(System.currentTimeMillis()), null, null);
 		
 		listOfCustomersToSave.add(customerToSave);
 		listOfCustomersToSave.add(customerToSave2);

@@ -1,9 +1,12 @@
 package com.btg.website.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Company {
@@ -13,15 +16,20 @@ public class Company {
 	private long id;
 	
 	private String name;
-	private Address address;
-	private Address address2;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="billing_address", referencedColumnName="id")
+	private Address billingAddress;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="shipping_address", referencedColumnName="id")
+	private Address shippingAddress;
 	private double discount;
 	private String phoneNumber;
 
-	public Company(String name,	Address address, Address address2, double discount, String phoneNumber) {
+	public Company(String name,	Address billingAddress, Address shippingAddress, double discount, String phoneNumber) {
 		this.name = name;
-		this.address = address;
-		this.address2 = address2;
+		this.billingAddress = billingAddress;
+		this.shippingAddress = shippingAddress;
 		this.discount = discount;
 		this.phoneNumber = phoneNumber;
 	}
@@ -34,20 +42,20 @@ public class Company {
 		this.name = name;
 	}
 
-	public Address getAddress() {
-		return this.address;
+	public Address getBillingAddress() {
+		return this.billingAddress;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setBillingAddress(Address billingAddress) {
+		this.billingAddress = billingAddress;
 	}
 
-	public Address getAddress2() {
-		return this.address2;
+	public Address getShippingAddress() {
+		return this.shippingAddress;
 	}
 
-	public void setAddress2(Address address2) {
-		this.address2 = address2;
+	public void setShippingAddress(Address shippingAddress) {
+		this.shippingAddress = shippingAddress;
 	}
 
 	public double getDiscount() {
@@ -85,10 +93,10 @@ public class Company {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.name);
 		sb.append(" ");
-		sb.append(this.address.toString());
-		if(address2 != null) {
+		sb.append(this.billingAddress.toString());
+		if(shippingAddress != null) {
 			sb.append(" ");
-			sb.append(address2);
+			sb.append(shippingAddress);
 			sb.append(" ");
 		} else {
 			sb.append(" ");
