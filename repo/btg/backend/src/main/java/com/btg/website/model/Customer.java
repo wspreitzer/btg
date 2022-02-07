@@ -27,8 +27,6 @@ public class Customer {
 	private Date signupDate;
 	private List<WishList> wishList;
 
-	
-
 	public Customer(String firstName, String lastName, Address address, Address address2,  Company company, String email, String phoneNumber,
 			String userName, String password, Date signupDate, List<WishList> wishList) {
 		this.firstName = firstName;
