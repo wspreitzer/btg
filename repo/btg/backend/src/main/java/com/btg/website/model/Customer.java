@@ -57,7 +57,7 @@ public class Customer {
 	
 
 	public Customer(String firstName, String lastName, Address billingAddress, Address shippingAddress,  Company company, String email, String phoneNumber,
-			String userName, String password, Date signupDate, List<WishList> wishList, List<CreditCard> creditCards) {
+			String userName, String password, List<WishList> wishList, List<CreditCard> creditCards) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.billingAddress = billingAddress;
@@ -67,7 +67,6 @@ public class Customer {
 		this.phoneNumber = phoneNumber;
 		this.userName = userName;
 		this.password = password;
-		this.signupDate = signupDate;
 		this.wishList = wishList;
 		this.creditCards = creditCards;
 	}
