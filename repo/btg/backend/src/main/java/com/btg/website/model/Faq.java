@@ -15,6 +15,8 @@ public class Faq {
 	private String question;
 	private String answer;
 
+	public Faq() {}
+	
 	public Faq(String question, String answer) {
 		this.question = question;
 		this.answer = answer;
@@ -58,5 +60,9 @@ public class Faq {
 		sb.append(" is: ");
 		sb.append(answer);
 		return sb.toString();
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
