@@ -54,19 +54,28 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CreditCard> creditCards;
 
-	public Customer(String firstName, String lastName, Address billingAddress, Address shippingAddress,  Company company, String email, String phoneNumber,
-			String userName, String password, List<WishList> wishList, List<CreditCard> creditCards) {
+	
+	public Customer(String firstName, String lastName, Address billingAddress, Company company, String email, String phoneNumber,
+			String userName, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.billingAddress = billingAddress;
-		this.shippingAddress = shippingAddress;
 		this.company = company;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.userName = userName;
 		this.password = password;
-		this.wishList = wishList;
-		this.creditCards = creditCards;
+	}
+	
+	public Customer(String firstName, String lastName, Address billingAddress, String email, String phoneNumber,
+			String userName, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.billingAddress = billingAddress;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.userName = userName;
+		this.password = password;
 	}
 	
 	public Customer(String firstName, String lastName, 
