@@ -34,6 +34,9 @@ public class Company {
 		this.phoneNumber = phoneNumber;
 	}
 	
+	public Company() {
+	}
+
 	public String getName() {
 		return this.name;
 	}

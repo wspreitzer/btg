@@ -13,6 +13,7 @@ public class BtgUtils {
 	
 	//@Value("${btg.search.regex}")
 	//private String regex;
+	
 	private static String regex = "(\\w+?)(:|<|>)(\\w+?),";
 	
 	public static String createExceptionMessage(String entity, Long id) {
