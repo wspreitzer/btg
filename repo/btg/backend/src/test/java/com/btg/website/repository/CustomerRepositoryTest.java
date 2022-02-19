@@ -25,21 +25,15 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-<<<<<<< HEAD
-=======
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
->>>>>>> customer_spec_feature
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-<<<<<<< HEAD
-=======
 import com.btg.website.WebsiteApplication;
->>>>>>> customer_spec_feature
 import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Customer;
 import com.btg.website.repository.specification.BtgSpecification;
@@ -49,12 +43,9 @@ import com.btg.website.util.SearchOperation;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {JacksonConfig.class})
 @Transactional
-<<<<<<< HEAD
-=======
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
 @SuppressWarnings("unchecked")
->>>>>>> customer_spec_feature
 public class CustomerRepositoryTest {
 
 	@MockBean
@@ -68,21 +59,14 @@ public class CustomerRepositoryTest {
 	@BeforeEach
 	public void setup() {
 		customerRepo = mock(CustomerRepository.class);
-<<<<<<< HEAD
-		customer = new Customer("Bob", "Smith", null, null, null, "bob.smith@comcast.com", "222-805-2222", "user1", "p@ssword", new Date(System.currentTimeMillis()), null, null);
-		customer2 = new Customer("John", "smythe", null, null, null, "john.smythe@comcast.net", "312-781-1916", "user2", "Pword", new Date(System.currentTimeMillis()), null, null);
-		customer3 = new Customer("Jon", "Doe", null, null, null, "jon.doe@company.com", "312-693-0103", "jdoe", "P@ssw0rd", new Date(System.currentTimeMillis()), null, null);
-		customer4 = new Customer("Tom", "Garcia", null, null, null, "tgarcia@company2.net", "773-805-3203", "tgarcia", "!P@ssW0rd", new Date(System.currentTimeMillis()), null, null);
-=======
-		customer = new Customer("Bob", "Smith", null, null, null, "bob.smith@comcast.com", 
-				"222-805-2222", "user1", "p@ssword", null, null);
-		customer2 = new Customer("John", "smythe", null, null, null, "john.smythe@comcast.net",
-				"312-781-1916", "user2", "Pword", null, null);
-		customer3 = new Customer("Jon", "Doe", null, null, null, "jon.doe@company.com",
-				"312-693-0103", "jdoe", "P@ssw0rd", null, null);
-		customer4 = new Customer("Tom", "Garcia", null, null, null, "tgarcia@company2.net", 
-				"773-805-3203", "tgarcia", "!P@ssW0rd", null, null);
->>>>>>> customer_spec_feature
+		customer = new Customer("Bob", "Smith", "bob.smith@comcast.com", 
+				"222-805-2222", "user1", "p@ssword");
+		customer2 = new Customer("John", "smythe", "john.smythe@comcast.net",
+				"312-781-1916", "user2", "Pword");
+		customer3 = new Customer("Jon", "Doe", "jon.doe@company.com",
+				"312-693-0103", "jdoe", "P@ssw0rd");
+		customer4 = new Customer("Tom", "Garcia", "tgarcia@company2.net", 
+				"773-805-3203", "tgarcia", "!P@ssW0rd");
 		
 		signUpDate = new Date(System.currentTimeMillis());
 		repository = setupRepository(customer, customer2, customer3, customer4);
@@ -114,12 +98,8 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	public void savesCustomerToRepositorySuccessfully() throws Exception {
-<<<<<<< HEAD
-		Customer customerToSave = new Customer("Bill","Clinton", null, null, null, "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password", new Date(System.currentTimeMillis()), null, null);
-=======
-		Customer customerToSave = new Customer("Bill","Clinton", null, null, null, "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password", null, null);
+		Customer customerToSave = new Customer("Bill","Clinton", "bill.clinton@whitehouse.gov", "312-555-0323", "user", "password");
 		customerToSave.setSignupDate(signUpDate);
->>>>>>> customer_spec_feature
 		when(customerRepo.save(any(Customer.class))).thenReturn(customerToSave);
 		Customer newCustomer = customerRepo.save(customerToSave);
 		assertThat(newCustomer.getFirstName(), is("Bill"));
@@ -129,18 +109,12 @@ public class CustomerRepositoryTest {
 	@Test
 	public void savesMutipleCustomerToRepositorySuccessfully() throws Exception {
 		List<Customer> listOfCustomersToSave = new ArrayList<Customer>();
-<<<<<<< HEAD
-		Customer customerToSave = new Customer("New", "Customer", null, null, null, "customer@email.com", "212-456-7854", "user22", "password", new Date(System.currentTimeMillis()), null, null);
-		Customer customerToSave2 = new Customer("New2", "Customer2", null, null, null, "customer2@email.com", "847-452-3715", "user69", "password69", new Date(System.currentTimeMillis()), null, null);
-		
-=======
-		Customer customerToSave = new Customer("New", "Customer", null, null, null, "customer@email.com",
-				"212-456-7854", "user22", "password", null, null);
-		Customer customerToSave2 = new Customer("New2", "Customer2", null, null, null, "customer2@email.com",
-				"847-452-3715", "user69", "password69", null, null);
+		Customer customerToSave = new Customer("New", "Customer", "customer@email.com",
+				"212-456-7854", "user22", "password");
+		Customer customerToSave2 = new Customer("New2", "Customer2", "customer2@email.com",
+				"847-452-3715", "user69", "password69");
 		customerToSave.setSignupDate(signUpDate);
 		customerToSave2.setSignupDate(signUpDate);
->>>>>>> customer_spec_feature
 		listOfCustomersToSave.add(customerToSave);
 		listOfCustomersToSave.add(customerToSave2);
 		when(customerRepo.saveAll(anyCollection())).thenReturn(listOfCustomersToSave);

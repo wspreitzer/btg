@@ -359,8 +359,8 @@ public class CustomerRestControllerTest {
 */
 	@Test
 	public void createsCustomerWhenRequestIsValid() throws Exception {
-		Customer customerToSave = new Customer("Patrick", "Kane", null, null, null, 
-				"pkane@chicagoblackhawks.nhl.com", "312-258-3696", "pkane88", "p@ssw0rd", null, null);
+		Customer customerToSave = new Customer("Patrick", "Kane", 
+				"pkane@chicagoblackhawks.nhl.com", "312-258-3696", "pkane88", "p@ssw0rd");
 		customerToSave.setSignupDate(signUpDate);
 		when(customerRepo.save(any(Customer.class))).thenReturn(customerToSave);
 		MvcResult mvcResult = mockedRequest.perform(post("/btg/rest/customer/")

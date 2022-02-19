@@ -53,15 +53,6 @@ public class Customer {
 	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CreditCard> creditCards;
-
-	@Column(name="sign_up_date")
-	private Date signupDate;
-	
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<WishList> wishList;
-	
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<CreditCard> creditCards;
 	
 	public Customer(String firstName, String lastName, 
 			String email, String phoneNumber, String userName, String password) {

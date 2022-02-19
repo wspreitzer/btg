@@ -113,7 +113,7 @@ public class CreditCardRestControllerTest {
 	
 	@Test
 	public void createCreditCardWhenValidRequest() throws Exception {
-		Customer customer = new Customer("Bob", "Smith", null, null, null, "bob.smith@comcast.net",  "312-781-1916", "user1", "P@ssword", new Date(System.currentTimeMillis()), null, null);
+		Customer customer = new Customer("Bob", "Smith", "bob.smith@comcast.net",  "312-781-1916", "user1", "P@ssword");
 		customer.setId(12345L);
 		CreditCard cardToSave = new CreditCard(customer, "Discover", "6013123456781234", "07", "22", "555");
 		when(creditCardRepo.save(any(CreditCard.class))).thenReturn(cardToSave);
