@@ -12,8 +12,10 @@ import com.btg.website.repository.builder.BtgSpecificationBuilder;
 @Component
 public class BtgUtils {
 	
-	@Value("${btg.search.regex}")
-	private static String regex;
+	//@Value("${btg.search.regex}")
+	//private static String regex;
+	
+	private static final String regex = "(\\w+?)(:|<|>)(\\w+?),";
 	
 	public static String createExceptionMessage(String entity, Long id) {
 		StringBuilder sb = new StringBuilder();
@@ -56,6 +58,4 @@ public class BtgUtils {
 		}
 		return builder;
 	}
-
-
 }

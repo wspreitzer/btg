@@ -54,8 +54,6 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CreditCard> creditCards;
 
-	
-
 	public Customer(String firstName, String lastName, Address billingAddress, Address shippingAddress,  Company company, String email, String phoneNumber,
 			String userName, String password, List<WishList> wishList, List<CreditCard> creditCards) {
 		this.firstName = firstName;
@@ -69,6 +67,16 @@ public class Customer {
 		this.password = password;
 		this.wishList = wishList;
 		this.creditCards = creditCards;
+	}
+	
+	public Customer(String firstName, String lastName, 
+			String email, String phoneNumber, String userName, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.userName = userName;
+		this.password = password;
 	}
 
 	public Customer() {}
@@ -96,20 +104,20 @@ public class Customer {
 		this.lastName = lastName;
 	}
 
-	public Address getAddress() {
+	public Address getBillingAddress() {
 		return this.billingAddress;
 	}
 	
-	public void setAddress(Address address) {
-		this.billingAddress = address;
+	public void setBillingAddress(Address billingAddress) {
+		this.billingAddress = billingAddress;
 	}
 	
-	public Address getAddress2() {
+	public Address getShippingAddress() {
 		return this.shippingAddress;
 	}
 	
-	public void setAddress2(Address address2) {
-		this.shippingAddress = address2;
+	public void setShippingAddress(Address shippingAddress) {
+		this.shippingAddress = shippingAddress;
 	}
 	
 	public Company getCompany() {
@@ -166,6 +174,14 @@ public class Customer {
 	
 	public void setWishList(List<WishList> wishList) {
 		this.wishList = wishList;
+	}
+
+	public List<CreditCard> getCreditCards() {
+		return creditCards;
+	}
+
+	public void setCreditCards(List<CreditCard> creditCards) {
+		this.creditCards = creditCards;
 	}
 	
 	@Override

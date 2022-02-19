@@ -35,6 +35,9 @@ public class Address {
 		this.zipCode = zipCode;
 	}
 
+	public Address() {
+	}
+
 	public long getId() {
 		return this.id;
 	}

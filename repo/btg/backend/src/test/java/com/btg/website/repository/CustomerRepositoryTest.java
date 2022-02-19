@@ -229,10 +229,10 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	public void returnsCustomerWhenFirstNameDoesntEqual() throws Exception {
-		when(customerRepo.findAll(any(Specification.class))).thenReturn(setupRepository(customer2, customer3));
+		when(customerRepo.findAll(any(Specification.class))).thenReturn(setupRepository(customer, customer2, customer3, customer4));
 		results = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("firstName", SearchOperation.NEGATION, "Robert")));
-		assertThat(results.size(), is(2));
-		assertThat(results, containsInAnyOrder(customer2, customer3));
+		assertThat(results.size(), is(4));
+		assertThat(results, containsInAnyOrder(customer, customer2, customer3, customer4));
 	}
 	
 	@Test
