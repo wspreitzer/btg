@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.btg.website.model.Product;
 import com.btg.website.model.WishList;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
@@ -86,7 +87,11 @@ public class WishListRepositoryTest {
 
 	@Test
 	public void savesWishListToRepositorySuccessfully() throws Exception {
-		WishList wishListToSave = new WishList(null,null, new Date(473040000000L));
+		List<Product> products = new ArrayList<Product>();
+		Product product = new Product("BTG Baseball Hat","123454-232adf","Baseball Hat with Btg logo", 10, 15.95);
+		product.setId(5L);
+		products.add(product);
+		WishList wishListToSave = new WishList(null,products, new Date(473040000000L));
 		when(wishListRepo.save(any(WishList.class))).thenReturn(wishListToSave);
 		WishList newWishList = wishListRepo.save(wishListToSave);
 		assertThat(newWishList.getProductId(), is(5L));

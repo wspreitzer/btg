@@ -82,6 +82,7 @@ public class CreditCardRestControllerTest {
 
 		List<Customer> customers = new ArrayList<Customer>();
 		Customer customer = new Customer();
+		customer.setSignupDate(new Date(System.currentTimeMillis()));
 		customers.add(customer);
 		when(customerRepo.findAll(any(BtgSpecification.class))).thenReturn(customers);
 		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
@@ -115,11 +116,12 @@ public class CreditCardRestControllerTest {
 	public void createCreditCardWhenValidRequest() throws Exception {
 		Customer customer = new Customer("Bob", "Smith", "bob.smith@comcast.net",  "312-781-1916", "user1", "P@ssword");
 		customer.setId(12345L);
+		customer.setSignupDate(new Date(System.currentTimeMillis()));
 		CreditCard cardToSave = new CreditCard(customer, "Discover", "6013123456781234", "07", "22", "555");
 		when(creditCardRepo.save(any(CreditCard.class))).thenReturn(cardToSave);
 		mockedRequest.perform(post("/btg/rest/creditCard")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{ \"customer\" : { \"firstName\" : \"Bob\", \"lastName\" : \"Smith\", \"billingAddress\" : {}, \"shippingAddress\" : {}, \"company\" : {}, \"email\" : \"bob.smith@comcast.net\", \"phoneNumber\" : \"312-781-1916\", \"userName\" : \"user1\", \"password\" : \"P@ssword\", \"signupDate\" : \"2022-01-23\", \"WishList\" : {}, \"CreditCards\" : {}},\"type\" : \"Discover\",\"number\" : \"6013123456781234\",\"exMon\" : \"07\",\"exYr\" : \"22\",\"cvv\" : \"555\"}")
+				.content("{ \"customer\" : { \"firstName\" : \"Bob\", \"lastName\" : \"Smith\", \"billingAddress\" : {}, \"email\" : \"bob.smith@comcast.net\", \"phoneNumber\" : \"312-781-1916\", \"userName\" : \"user1\", \"password\" : \"P@ssword\", \"signupDate\" : \"2022-01-23\"}, \"type\" : \"Discover\",\"number\" : \"6013123456781234\",\"exMon\" : \"07\",\"exYr\" : \"22\",\"cvv\" : \"555\"}")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
 				.andExpect(header().string("Location", "/btg/rest/creditCards/0"))
