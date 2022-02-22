@@ -33,6 +33,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -56,7 +57,7 @@ public class CustomerRestControllerTest {
 
 	@MockBean private CustomerRepository customerRepo;
 	
-	@InjectMocks CustomerRestController controller;
+	//@InjectMocks CustomerRestController controller;
 	
 	@Autowired private WebApplicationContext webApplicationContext;
 	
@@ -96,7 +97,7 @@ public class CustomerRestControllerTest {
 		customerList = customerUtils.setupRepository(customer, customer2, customer3, customer4);
 		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
-	
+
 	@Test
 	public void returns404WhenCustomerIsNotFoundById() throws Exception {
 		when(customerRepo.findById(anyLong())).thenReturn(Optional.empty());
@@ -130,8 +131,7 @@ public class CustomerRestControllerTest {
 				.andExpect(jsonPath("$.signupDate").value(signUpDate.toString())).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
-
-/*	
+	
 	@Test
 	public void returnsCustomerWhenFirstNameEquals() throws Exception {
 		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer));
@@ -196,8 +196,17 @@ public class CustomerRestControllerTest {
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
-		
 	}
+	
+	/*
+	 * @Test public void returnsCustomerWhenLastNameEqauls2() throws Exception {
+	 * when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils
+	 * .setupRepository(customer)); MvcResult mvcResult = mockedRequest
+	 * .perform(get("/btg/rest/customerSearch/") .param("search", "lastName:Smith")
+	 * .accept(MediaType.APPLICATION_JSON)) .andExpect(status().isOk()).andReturn();
+	 * System.out.println(mvcResult.getResponse().getContentAsString()); }
+	 */
+	
 	
 	@Test
 	public void returnsCustomerWhenLastNameBeginsWith() throws Exception {
@@ -208,19 +217,17 @@ public class CustomerRestControllerTest {
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
-		
 	}
-	
+
 	@Test
-	public void returnsCustomerWhenLastNameEndsWith() throws Exception {
-		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer3));
+	public void returnsCustomerWhenLastNameEndsWith2() throws Exception {
+		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/customerSearch/")
-						.param("search", "lastName:*oe")
+						.param("search", "lastName:*ith")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
-		
 	}
 	
 	@Test
@@ -245,6 +252,8 @@ public class CustomerRestControllerTest {
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
+	
+
 	
 	@Test
 	public void returnsCustomerWhenEmailEquals() throws Exception {
@@ -313,12 +322,13 @@ public class CustomerRestControllerTest {
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
 
+	
 	@Test
 	public void returnsCustomerWhenPhoneNumberBeginsWith() throws Exception {
-		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer2, customer3));
+		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/customerSearch/")
-						.param("search", "phoneNumber:312*")
+						.param("search", "phoneNumber:312")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -356,7 +366,7 @@ public class CustomerRestControllerTest {
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
-*/
+	
 	@Test
 	public void createsCustomerWhenRequestIsValid() throws Exception {
 		Customer customerToSave = new Customer("Patrick", "Kane", 
