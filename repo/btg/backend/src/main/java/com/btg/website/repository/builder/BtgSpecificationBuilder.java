@@ -42,7 +42,7 @@ private List<SearchCriteria> params;
 		params.add(new SearchCriteria(orIndicator, key, op, value));
 		return this;
 	}
-	
+
 	public BtgSpecificationBuilder<T> with(final String key, final String operation, final Object value, 
 			final String prefix, final String suffix) {
 		return this.with(null, key, operation, value, prefix, suffix);
