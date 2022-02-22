@@ -31,6 +31,7 @@ import com.btg.website.repository.CreditCardRepository;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
+import com.btg.website.util.BtgUtils;
 import com.btg.website.util.CreditCardModelAssembler;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
@@ -68,18 +69,8 @@ public class CreditCardRestController extends BtgRestController<CreditCard> {
 
 	@GetMapping("/rest/creditCardsBySpecification/")
 	public CollectionModel<EntityModel<CreditCard>> getUserCreditCardsBySpecification(@RequestParam(value="search") String search) throws Exception {
-		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-		Matcher matcher = pattern.matcher(search + ",");
+		builder = BtgUtils.buildSearchCriteria(builder, search);
 		builder.with("customer", ":", 0, "", "");
-		while (matcher.find()) {
-			if(matcher.groupCount() == 3) {
-				builder.with(matcher.group(1), matcher.group(2), "", matcher.group(3), "");
-			} else if (matcher.groupCount() == 5) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
-			} else {
-				throw new Exception();
-			}
-		}
 		
 		Specification<CreditCard> spec =  builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
 		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(spec).stream().map(assembler::toModel).collect(Collectors.toList());

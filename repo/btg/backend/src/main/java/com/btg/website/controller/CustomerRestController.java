@@ -45,91 +45,79 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 
 @RestController
-public class CustomerRestController extends BtgRestController<Customer>{
+public class CustomerRestController extends BtgRestController<Customer> {
 
 	private final CustomerModelAssembler assembler;
-	
+
 	private final BtgUtils customerUtils;
 	private final ObjectMapper objectMapper = new ObjectMapper();
-	
-	@Autowired private CustomerRepository customerRepo;
-	
+
+	@Autowired
+	private CustomerRepository customerRepo;
+
 	@Autowired
 	CustomerRestController(CustomerModelAssembler assembler, BtgUtils customerUtils) {
 		builder = new BtgSpecificationBuilder<Customer>();
 		this.assembler = assembler;
 		this.customerUtils = customerUtils;
 	}
-	
+
 	@PostMapping("/rest/customer")
-	public ResponseEntity<EntityModel<Customer>> saveCustomer(@RequestBody Customer customer, HttpServletResponse response, HttpServletRequest request) {
+	public ResponseEntity<EntityModel<Customer>> saveCustomer(@RequestBody Customer customer,
+			HttpServletResponse response, HttpServletRequest request) {
 		customer.setSignupDate(new Date(System.currentTimeMillis()));
 		Customer newCustomer = customerRepo.save(customer);
 		return ResponseEntity
-				.created(linkTo(methodOn(CustomerRestController.class)
-						.getCustomerById(newCustomer.getId())).toUri())
-				.header("Location", String.format("%s/btg/rest/customers/%s",
-						request.getContextPath(), newCustomer.getId(), null))
+				.created(linkTo(methodOn(CustomerRestController.class).getCustomerById(newCustomer.getId())).toUri())
+				.header("Location",
+						String.format("%s/btg/rest/customers/%s", request.getContextPath(), newCustomer.getId(), null))
 				.body(assembler.toModel(newCustomer));
 	}
-	
-	
-	  @PostMapping("/admin/rest/customers") 
-	  public List<ResponseEntity<EntityModel<Customer>>> saveCustomers(@RequestBody List<Customer> customers, HttpServletResponse response, HttpServletRequest request) {
-		  Date signupDate = new Date(System.currentTimeMillis());
-		  customers.forEach(aCustomer -> {
-			 aCustomer.setSignupDate(signupDate); 
-		  });
-		  List<Customer> savedCustomers = customerRepo.saveAll(customers);
-		  List<ResponseEntity<EntityModel<Customer>>> retVal = new ArrayList<ResponseEntity<EntityModel<Customer>>>();
-		  savedCustomers.forEach(c -> {
-			  final ResponseEntity<EntityModel<Customer>> responseEntity = ResponseEntity
-					  .created(linkTo(methodOn(CustomerRestController.class).getCustomerById(c.getId())).toUri())
-		  			  .header("Location", String.format("%s/btg/admin/rest/customers/%s", request.getContextPath(), c.getId(), null))
-		  			  .body(assembler.toModel(c));
-			  retVal.add(responseEntity);
-		  });
-		  return retVal;
-	  }
-	 
-	
+
+	@PostMapping("/admin/rest/customers")
+	public List<ResponseEntity<EntityModel<Customer>>> saveCustomers(@RequestBody List<Customer> customers,
+			HttpServletResponse response, HttpServletRequest request) {
+		Date signupDate = new Date(System.currentTimeMillis());
+		customers.forEach(aCustomer -> {
+			aCustomer.setSignupDate(signupDate);
+		});
+		List<Customer> savedCustomers = customerRepo.saveAll(customers);
+		List<ResponseEntity<EntityModel<Customer>>> retVal = new ArrayList<ResponseEntity<EntityModel<Customer>>>();
+		savedCustomers.forEach(c -> {
+			final ResponseEntity<EntityModel<Customer>> responseEntity = ResponseEntity
+					.created(linkTo(methodOn(CustomerRestController.class).getCustomerById(c.getId())).toUri())
+					.header("Location",
+							String.format("%s/btg/admin/rest/customers/%s", request.getContextPath(), c.getId(), null))
+					.body(assembler.toModel(c));
+			retVal.add(responseEntity);
+		});
+		return retVal;
+	}
+
 	@GetMapping("/rest/customers/{id}")
 	public EntityModel<Customer> getCustomerById(@PathVariable Long id) {
 		Customer customer = customerRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", id));
-		return EntityModel.of(customer, 
+		return EntityModel.of(customer,
 				linkTo(methodOn(CustomerRestController.class).getCustomerById(id)).withSelfRel(),
 				linkTo(methodOn(CustomerRestController.class).getCustomers()).withRel("customers"));
 	}
-	
+
 	@GetMapping("/admin/rest/customers")
 	public CollectionModel<EntityModel<Customer>> getCustomers() {
-		List<EntityModel<Customer>> customers = customerRepo.findAll()
-				.stream().map(assembler::toModel).collect(toList());
+		List<EntityModel<Customer>> customers = customerRepo.findAll().stream().map(assembler::toModel)
+				.collect(toList());
 		if (customers.size() > 0) {
 			return CollectionModel.of(customers,
 					linkTo(methodOn(CustomerRestController.class).getCustomers()).withSelfRel());
 		} else {
 			throw new ResourceNotFoundException();
 		}
-	} 
-	
+	}
+
 	@GetMapping("/rest/customerSearch")
 	public CollectionModel<EntityModel<Customer>> getCustomersBySpecification(
-			@RequestParam(value = "search") String search) throws Exception {
-		//builder = BtgUtils.buildSearchCriteria(builder, search);
-
-		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-		Matcher matcher = pattern.matcher(search + ",");
-		while(matcher.find()) {
-			if(matcher.groupCount() == 3) {
-				builder.with(matcher.group(1), matcher.group(2), "", matcher.group(3), "" );
-			} else if (matcher.groupCount() == 5) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
-			} else {
-				throw new InvalidRequestException();
-			}
-		}
-		
+			@RequestParam(value="search") String search) throws Exception {
+		builder = BtgUtils.buildSearchCriteria(builder, search);
 		Specification<Customer> spec = builder
 				.build(searchCriteria -> new BtgSpecification<Customer>((SearchCriteria) searchCriteria));
 		List<EntityModel<Customer>> ordersList = customerRepo.findAll(spec).stream().map(assembler::toModel)
@@ -141,11 +129,11 @@ public class CustomerRestController extends BtgRestController<Customer>{
 			throw new ResourceNotFoundException("Order", builder);
 		}
 	}
-	
+
 	@PutMapping("/rest/customer/{id}")
 	public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
 		return customerRepo.findById(id).map(foundCustomer -> {
-System.out.println("this is signUpDate: " + customer.getSignupDate());
+			System.out.println("this is signUpDate: " + customer.getSignupDate());
 			foundCustomer.setFirstName(customer.getFirstName());
 			foundCustomer.setLastName(customer.getLastName());
 			foundCustomer.setBillingAddress(customer.getBillingAddress());
@@ -165,12 +153,13 @@ System.out.println("this is signUpDate: " + customer.getSignupDate());
 			return ResponseEntity.ok(assembler.toModel(customerRepo.save(customer)));
 		});
 	}
-	
+
 	@PatchMapping(path = "/rest/customer/{id}", consumes = "application/json-patch+json")
 	public ResponseEntity<EntityModel<Customer>> updateCustomer(@PathVariable Long id, @RequestBody JsonPatch patch) {
 		ResponseEntity<EntityModel<Customer>> retVal;
 		try {
-			Customer customer = customerRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", id));
+			Customer customer = customerRepo.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("Customer", id));
 			Customer updatedCustomer = applyPatchToCustomer(patch, customer);
 			retVal = ResponseEntity.ok(assembler.toModel(customerRepo.save(updatedCustomer)));
 		} catch (JsonPatchException | JsonProcessingException e) {
@@ -181,20 +170,21 @@ System.out.println("this is signUpDate: " + customer.getSignupDate());
 		}
 		return retVal;
 	}
-	
+
 	@DeleteMapping("/rest/customer/{id}")
 	public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
 		customerRepo.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@DeleteMapping("/admin/rest/customers")
 	public ResponseEntity<?> deleteCustomers() {
 		customerRepo.deleteAll();
 		return ResponseEntity.noContent().build();
 	}
-	
-	private Customer applyPatchToCustomer(JsonPatch patch, Customer targetCustomer) throws JsonPatchException, JsonProcessingException {
+
+	private Customer applyPatchToCustomer(JsonPatch patch, Customer targetCustomer)
+			throws JsonPatchException, JsonProcessingException {
 		JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
 		return objectMapper.treeToValue(patched, Customer.class);
 	}
