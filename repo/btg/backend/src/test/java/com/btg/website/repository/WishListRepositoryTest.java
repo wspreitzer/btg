@@ -94,7 +94,7 @@ public class WishListRepositoryTest {
 		WishList wishListToSave = new WishList(null,products, new Date(473040000000L));
 		when(wishListRepo.save(any(WishList.class))).thenReturn(wishListToSave);
 		WishList newWishList = wishListRepo.save(wishListToSave);
-		assertThat(newWishList.getProductId(), is(5L));
+		assertThat(newWishList.getProducts().get(0).getId(), is(products.get(0).getId()));
 		assertThat(fmt.format(newWishList.getAddedDate()), is(formatDateAsString(newWishList.getAddedDate())));
 	}
 	

@@ -12,12 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
 @Entity
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class WishList {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Customer customer;
@@ -35,7 +39,7 @@ public class WishList {
 		this.addedDate = addedDate;
 	}
 
-	public List<Product> getProductId() {
+	public List<Product> getProducts() {
 		return products;
 	}
 
@@ -47,10 +51,6 @@ public class WishList {
 		return customer;
 	}
 
-	public void setCustomerId(Customer customer) {
-		this.customer = customer;
-	}
-
 	public Date getAddedDate() {
 		return addedDate;
 	}
@@ -59,8 +59,16 @@ public class WishList {
 		this.addedDate = addedDate;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	@Override

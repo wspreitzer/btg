@@ -48,8 +48,9 @@ public class Customer {
 	@Column(name="sign_up_date")
 	private Date signupDate;
 	
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<WishList> wishList;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "wish_list", referencedColumnName = "id")
+	private WishList wishList;
 	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CreditCard> creditCards;
@@ -176,11 +177,11 @@ public class Customer {
 		this.signupDate = signupDate;
 	}
 
-	public List<WishList> getWishList() {
+	public WishList getWishList() {
 		return this.wishList;
 	}
 	
-	public void setWishList(List<WishList> wishList) {
+	public void setWishList(WishList wishList) {
 		this.wishList = wishList;
 	}
 
