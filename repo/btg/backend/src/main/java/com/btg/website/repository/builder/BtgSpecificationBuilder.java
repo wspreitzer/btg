@@ -61,10 +61,6 @@ public class BtgSpecificationBuilder<T> {
 			for(int i = 1; i < specs.size(); i++) {
 				result = params.get(i)
 						.isOrPredicate()
-							? Specification.where(result)
-									.or(specs.get(i))
-							: Specification.where(result)
-									.and(specs.get(i));
 						? Specification.where(result)
 								.or(specs.get(i))
 								: Specification.where(result)
