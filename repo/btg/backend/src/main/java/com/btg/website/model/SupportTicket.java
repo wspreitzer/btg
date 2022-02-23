@@ -2,10 +2,13 @@ package com.btg.website.model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class SupportTicket {
@@ -16,16 +19,21 @@ public class SupportTicket {
 	
 	private String title;
 	private String description;
-	private Date creationDate;
-	private String status;
-	private long customerId;
 	
-	public SupportTicket(String title, String description, Date creationDate, String status, long customerId) {
+	@Column(name="creation_date")
+	private Date creationDate;
+	
+	private String status;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Customer customer;
+	
+	public SupportTicket(String title, String description, Date creationDate, String status, Customer customer) {
 		this.title = title;
 		this.description = description;
 		this.creationDate = creationDate;
 		this.status = status;
-		this.customerId = customerId;
+		this.customer = customer;
 	}
 	
 	public long getId() {
@@ -64,12 +72,12 @@ public class SupportTicket {
 		this.status = status;
 	}
 	
-	public long getCustomerId() {
-		return customerId;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	@Override
