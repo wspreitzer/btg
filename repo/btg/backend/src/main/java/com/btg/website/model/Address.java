@@ -1,11 +1,17 @@
 package com.btg.website.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="ADDRESS_TABLE")
 public class Address {
 
 	@Id
@@ -14,7 +20,12 @@ public class Address {
 	
 	private String street;
 	private String city;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="state_id", referencedColumnName = "id")
 	private State state;
+	
+	@Column(name="zip_code")
 	private String zipCode;
 	
 	public Address(String street, String city, State state, String zipCode) {
@@ -22,6 +33,9 @@ public class Address {
 		this.city = city;
 		this.state = state;
 		this.zipCode = zipCode;
+	}
+
+	public Address() {
 	}
 
 	public long getId() {
@@ -62,13 +76,11 @@ public class Address {
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
 		return super.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
 		return super.equals(obj);
 	}
 
@@ -83,9 +95,5 @@ public class Address {
 		sb.append(" ");
 		sb.append(zipCode);
 		return super.toString();
-	}
-	
-	
-	
-	
+	}	
 }

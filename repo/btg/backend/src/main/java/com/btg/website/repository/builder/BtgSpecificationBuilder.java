@@ -15,7 +15,8 @@ import com.btg.website.util.SearchOperation;
 
 @Component
 public class BtgSpecificationBuilder<T> {
-private List<SearchCriteria> params;
+
+	private List<SearchCriteria> params;
 	
 	public BtgSpecificationBuilder() {
 		this.params = new ArrayList<SearchCriteria>();
@@ -52,7 +53,6 @@ private List<SearchCriteria> params;
 	
 	public  Specification<T> build(Function<SearchCriteria, BtgSpecification<T>> converter) {
 		Specification<T> result;
-
 		if(params.size() > 0) {
 			final List<Specification<T>> specs = params.stream()
 					.map(converter)
@@ -65,11 +65,14 @@ private List<SearchCriteria> params;
 									.or(specs.get(i))
 							: Specification.where(result)
 									.and(specs.get(i));
+						? Specification.where(result)
+								.or(specs.get(i))
+								: Specification.where(result)
+								.and(specs.get(i));
 			}
 		} else {
 			throw new InvalidRequestException();
 		}
-		
 		return result;
 	}
 }
