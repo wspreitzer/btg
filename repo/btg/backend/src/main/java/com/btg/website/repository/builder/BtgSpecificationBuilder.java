@@ -12,10 +12,15 @@ import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
 public class BtgSpecificationBuilder<T> {
-private List<SearchCriteria> params;
+
+	private List<SearchCriteria> params;
 	
 	public BtgSpecificationBuilder() {
 		this.params = new ArrayList<SearchCriteria>();
+	}
+	
+	public List<SearchCriteria> getParams() {
+		return params;
 	}
 	
 	public BtgSpecificationBuilder<T> with(final String orIndicator, final String key, 
