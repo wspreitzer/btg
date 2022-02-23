@@ -44,6 +44,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
 public class ProductRestController extends BtgRestController<Product> {
 
 	@Autowired private ProductRepository productRepo;
+	
 	private final ProductModelAssembler assembler;
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
@@ -99,7 +100,7 @@ public class ProductRestController extends BtgRestController<Product> {
 	}
 	
 	@GetMapping("/rest/productSearch")
-	public CollectionModel<EntityModel<Product>> getProductsBySpecification(@RequestParam(value = "search") String search) throws Exception {
+	public CollectionModel<EntityModel<Product>> getProductsBySpecification(@RequestParam(value="search") String search) throws Exception {
 		this.builder = BtgUtils.buildSearchCriteria(builder, search);
 		Specification<Product> spec = builder
 				.build(searchCriteria -> new BtgSpecification<Product>((SearchCriteria) searchCriteria));
@@ -112,7 +113,7 @@ public class ProductRestController extends BtgRestController<Product> {
 		}
 	}
 	
-	@PutMapping("/admin/rest/updateProductField/{id}")
+	@PutMapping("/admin/rest/updateProduct/{id}")
 	public ResponseEntity<?> updfdateProduct(@PathVariable Long id, @RequestBody Product product) {
 		return productRepo.findById(id).map(foundProduct -> {
 					foundProduct.setName(product.getName());
