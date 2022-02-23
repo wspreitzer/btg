@@ -6,10 +6,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
-<<<<<<< HEAD
-=======
+
 import org.springframework.stereotype.Component;
->>>>>>> main
 
 import com.btg.website.util.SearchCriteria;
 
