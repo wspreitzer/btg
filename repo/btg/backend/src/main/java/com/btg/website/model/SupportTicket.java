@@ -28,6 +28,7 @@ public class SupportTicket {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Customer customer;
 	
+	public SupportTicket() {}
 	public SupportTicket(String title, String description, Date creationDate, String status, Customer customer) {
 		this.title = title;
 		this.description = description;

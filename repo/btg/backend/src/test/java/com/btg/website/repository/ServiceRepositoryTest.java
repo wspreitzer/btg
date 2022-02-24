@@ -29,6 +29,7 @@ import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@SuppressWarnings("unchecked")
 public class ServiceRepositoryTest {
 
 	@MockBean

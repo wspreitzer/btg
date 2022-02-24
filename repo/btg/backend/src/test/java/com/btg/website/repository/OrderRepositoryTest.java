@@ -22,11 +22,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.btg.website.controller.OrderRestController;
 import com.btg.website.model.Order;
 import com.btg.website.model.Status;
 import com.btg.website.repository.specification.BtgSpecification;

@@ -34,7 +34,6 @@ import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Order;
 import com.btg.website.model.OrderLineItem;
 import com.btg.website.repository.OrderLineItemRepository;
-import com.btg.website.repository.OrderRepository;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)

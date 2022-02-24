@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.btg.website.model.Cart;
-import com.btg.website.repository.CartRepository;
 
 public class CartRepositoryTest {
 

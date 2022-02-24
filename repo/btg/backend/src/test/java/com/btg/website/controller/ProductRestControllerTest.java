@@ -7,7 +7,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -77,7 +76,7 @@ public class ProductRestControllerTest {
 		productList = productUtils.setupRepository(product, product2, product3, product4);
 		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
-/*	
+	
 	@Test
 	public void createsProductWhenRequestIsVaild() throws Exception {
 		Product productToSave = new Product("New Product","SKU","This is a new product",15, 19.95);
@@ -131,7 +130,7 @@ public class ProductRestControllerTest {
 						.andExpect(jsonPath("$.price").value(product.getPrice())).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
-	*/
+
 	@Test
 	public void returnsProductWhenNameEquals() throws Exception {
 		when(productRepo.findAll(any(Specification.class))).thenReturn(productUtils.setupRepository(product));
@@ -331,7 +330,7 @@ public class ProductRestControllerTest {
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
-/*
+
 	@Test
 	public void updatesProductByIdWhenRequestIsValid() throws Exception {
 		when(productRepo.findById(anyLong())).thenReturn(Optional.of(product));
@@ -484,5 +483,4 @@ public class ProductRestControllerTest {
 		verify(productRepo).deleteAll();
 		assertThat(productList.size(), is(0));
 	}
-	*/
 }

@@ -25,11 +25,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.btg.website.model.Customer;
 import com.btg.website.model.SupportTicket;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@SuppressWarnings("unchecked")
 public class SupportTicketRepositoryTest {
 	
 	@MockBean
@@ -39,21 +41,24 @@ public class SupportTicketRepositoryTest {
 	
 	private List<SupportTicket> repository;
 	private List<SupportTicket> results;
+	private Customer customer;
 	
 	@BeforeEach
 	public void setup() {
+		customer = new Customer("Bob", "Smith", "bob.smith@comcast.net", 
+				"222-805-2222", "user1", "p@ssword");
 		supportTicketRepo = mock(SupportTicketRepository.class);
 		//17,712,000,000
-		supportTicket = new SupportTicket("Customer ticket 1", "Customer reports website is down", new Date(86400000L), "opened", 1L);
+		supportTicket = new SupportTicket("Customer ticket 1", "Customer reports website is down", new Date(86400000L), "opened", customer);
 		System.out.println("This is 1 " + supportTicket.getCreationDate());
 		
-		supportTicket2 = new SupportTicket("My Ticket", "One more ticket", new Date(157680000000L), "opened", 2L);
+		supportTicket2 = new SupportTicket("My Ticket", "One more ticket", new Date(157680000000L), "opened", customer);
 		System.out.println("This is 2 " + supportTicket2.getCreationDate());
 		
-		supportTicket3 = new SupportTicket("Your Ticket to finish", "A Ticket to finish", new Date(31536000000L), "opened", 3L);
+		supportTicket3 = new SupportTicket("Your Ticket to finish", "A Ticket to finish", new Date(31536000000L), "opened", customer);
 		System.out.println("This is 3 " + supportTicket3.getCreationDate());
 		
-		supportTicket4 = new SupportTicket("Support Ticket", "A Opened support ticket", new Date(206928000000L), "opened", 4L);
+		supportTicket4 = new SupportTicket("Support Ticket", "A Opened support ticket", new Date(206928000000L), "opened", customer);
 		System.out.println("This is 4 " + supportTicket4.getCreationDate());
 		repository = setupRepository(supportTicket, supportTicket2, supportTicket3, supportTicket4);
 	}
@@ -85,22 +90,21 @@ public class SupportTicketRepositoryTest {
 	@Test
 	public void savesSupportTicketToRepositorySuccessfully() throws Exception {
 		long milliseconds = System.currentTimeMillis();
-		SupportTicket supportTicketToSave = new SupportTicket("Support Ticket 55", "Chat feature is down", new Date(milliseconds), "opened", 5L);
+		SupportTicket supportTicketToSave = new SupportTicket("Support Ticket 55", "Chat feature is down", new Date(milliseconds), "opened", customer);
 		when(supportTicketRepo.save(any(SupportTicket.class))).thenReturn(supportTicketToSave);
 		SupportTicket newSupportTicket = supportTicketRepo.save(supportTicketToSave);
 		assertThat(newSupportTicket.getTitle(), is("Support Ticket 55"));
 		assertThat(newSupportTicket.getDescription(), is("Chat feature is down"));
 		assertThat(newSupportTicket.getCreationDate(), is(supportTicketToSave.getCreationDate()));
 		assertThat(newSupportTicket.getStatus(), is("opened"));
-		assertThat(newSupportTicket.getCustomerId(), is(5L));
 	}
 
 	@Test
 	public void savesMultipleSupportTicketToRepositorySuccessfully() throws Exception {
 		long milliseconds = System.currentTimeMillis();
 		List<SupportTicket> listOfSupportTicketsToSave = new ArrayList<SupportTicket>();
-		SupportTicket supportTicketToSave = new SupportTicket("Support Ticket 55", "Chat feature is down", new Date(milliseconds), "opened", 5L);
-		SupportTicket supportTicketToSave2 = new SupportTicket("Support Ticket 66", "Chat feature is down", new Date(milliseconds), "opened", 6L);
+		SupportTicket supportTicketToSave = new SupportTicket("Support Ticket 55", "Chat feature is down", new Date(milliseconds), "opened", customer);
+		SupportTicket supportTicketToSave2 = new SupportTicket("Support Ticket 66", "Chat feature is down", new Date(milliseconds), "opened", customer);
 		
 		listOfSupportTicketsToSave.add(supportTicketToSave);
 		listOfSupportTicketsToSave.add(supportTicketToSave2);

@@ -57,7 +57,7 @@ public class CustomerRestControllerTest {
 
 	@MockBean private CustomerRepository customerRepo;
 	
-	//@InjectMocks CustomerRestController controller;
+	@InjectMocks CustomerRestController controller;
 	
 	@Autowired private WebApplicationContext webApplicationContext;
 	

@@ -6,12 +6,21 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.btg.website.exception.ResourceNotFoundException;
@@ -24,7 +33,11 @@ import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 import com.btg.website.util.SupportTicketModelAssembler;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 
 @RestController
 public class SupportTicketRestController extends BtgRestController<SupportTicket> {
@@ -41,9 +54,20 @@ public class SupportTicketRestController extends BtgRestController<SupportTicket
 		this.assembler = assembler;
 	}
 	
+	@PostMapping("/rest/supportTicket/")
+	public ResponseEntity<EntityModel<SupportTicket>> createSupportTicket(@RequestBody SupportTicket ticket, HttpServletResponse response, HttpServletRequest request) {
+		SupportTicket newTicket = supportTicketRepo.save(ticket);
+		return ResponseEntity
+				.created(linkTo(methodOn(SupportTicketRestController.class).getSupportTicketById(newTicket.getId())).toUri())
+				.header("Location", String.format("%s/btg/rest/supportTicket/%s", request.getContextPath(), newTicket.getId(), null))
+				.body(assembler.toModel(newTicket));
+	}
+	
 	@GetMapping("/rest/supportTicket/{id}")
 	public EntityModel<SupportTicket> getSupportTicketById(@PathVariable Long id) {
-		return null;
+		SupportTicket ticket = supportTicketRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("SupportTicket", id));
+		return EntityModel.of(ticket,
+				linkTo(methodOn(SupportTicketRestController.class).getSupportTicketById(id)).withSelfRel());
 	}
 	
 	@GetMapping("/rest/supportTickets")
@@ -58,5 +82,32 @@ public class SupportTicketRestController extends BtgRestController<SupportTicket
 		} else {
 			throw new ResourceNotFoundException();
 		}
+	}
+
+	@PatchMapping(path = "/rest/updateSupportTicket/{id}", consumes = "application/json-patch+json")
+	public ResponseEntity<EntityModel<SupportTicket>> updateSupportTicketField(@PathVariable Long id, @RequestBody JsonPatch patch) {
+		ResponseEntity<EntityModel<SupportTicket>> retVal;
+		try {
+			SupportTicket foundTicket = supportTicketRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Support Ticket", id));
+			SupportTicket updatedTicket = applyPatchToSupportTicket(patch, foundTicket);
+			retVal = ResponseEntity.ok(assembler.toModel(supportTicketRepo.save(updatedTicket)));
+		} catch(JsonPatchException | JsonProcessingException e) {
+			retVal = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			e.printStackTrace();
+		} catch(ResourceNotFoundException e) {
+			retVal = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return retVal;
+	}
+	
+	@DeleteMapping("/rest/supportTicket/{id}")
+	public ResponseEntity<?> deleteSupportTicketById(@PathVariable Long id) {
+		supportTicketRepo.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	private SupportTicket applyPatchToSupportTicket(JsonPatch patch, SupportTicket targetSupportTicket) throws JsonPatchException, JsonProcessingException {
+		JsonNode patched = patch.apply(objectMapper.convertValue(targetSupportTicket, JsonNode.class));
+		return objectMapper.treeToValue(patched, SupportTicket.class);
 	}
 }

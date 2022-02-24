@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.btg.website.exception.InvalidRequestException;
 import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.Faq;
 import com.btg.website.repository.FaqRepository;
@@ -104,12 +103,13 @@ public class FaqRestController extends BtgRestController<Faq> {
 			updatedFaq.setAnswer(update);
 			break;
 		default:
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			retVal = ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE)
 					.body(Problem.create()
 							.withTitle("Bad Request").withDetail("Invalid field name provided.  Please provide a valid field name"));
 		}
-		return ResponseEntity.ok(assembler.toModel(faqRepo.save(updatedFaq)));
+		retVal = ResponseEntity.ok(assembler.toModel(faqRepo.save(updatedFaq)));
+		return retVal;
 	}
 	
 	@PutMapping("/admin/rest/faqs/")

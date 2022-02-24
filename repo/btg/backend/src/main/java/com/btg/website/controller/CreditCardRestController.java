@@ -4,8 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.CreditCard;
 import com.btg.website.repository.CreditCardRepository;
-import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.BtgUtils;

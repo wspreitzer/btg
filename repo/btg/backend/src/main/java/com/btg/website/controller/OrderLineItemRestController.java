@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.OrderLineItem;
 import com.btg.website.repository.OrderLineItemRepository;
-import com.btg.website.repository.OrderRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.OrderLineItemModelAssembler;
@@ -26,9 +25,7 @@ import com.btg.website.util.SearchOperation;
 @RestController
 public class OrderLineItemRestController extends BtgRestController<OrderLineItem> {
 
-	@Autowired private OrderRepository orderRepo;
 	@Autowired private OrderLineItemRepository orderLineItemRepo;
-	private List<OrderLineItem> orderLineItemsList;
 	
 	private OrderLineItemModelAssembler assembler;
 	

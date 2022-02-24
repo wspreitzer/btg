@@ -7,8 +7,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.btg.website.exception.InvalidRequestException;
 import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.Customer;
 import com.btg.website.repository.CustomerRepository;
@@ -49,17 +46,15 @@ public class CustomerRestController extends BtgRestController<Customer> {
 
 	private final CustomerModelAssembler assembler;
 
-	private final BtgUtils customerUtils;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Autowired
 	private CustomerRepository customerRepo;
 
 	@Autowired
-	CustomerRestController(CustomerModelAssembler assembler, BtgUtils customerUtils) {
+	CustomerRestController(CustomerModelAssembler assembler) {
 		builder = new BtgSpecificationBuilder<Customer>();
 		this.assembler = assembler;
-		this.customerUtils = customerUtils;
 	}
 
 	@PostMapping("/rest/customer")

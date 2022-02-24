@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.assertj.core.util.Arrays;
 
+@SuppressWarnings("unchecked")
 public class TestUtils<T> {
 
 	public  List<T> setupRepository(T...entities) {
