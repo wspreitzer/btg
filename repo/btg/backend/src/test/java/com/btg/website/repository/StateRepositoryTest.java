@@ -2,8 +2,8 @@ package com.btg.website.repository;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -24,10 +24,10 @@ import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
-
+@SuppressWarnings("unchecked")
 public class StateRepositoryTest {
 
-	private State state, state2, state3, state4, state5, state6, state7, state8, state9, state10;
+	private State state, state2, state3, state4, state5, state6, state7, state8;
 	private List<State> repository;
 	private BtgSpecificationBuilder<State> builder;
 	

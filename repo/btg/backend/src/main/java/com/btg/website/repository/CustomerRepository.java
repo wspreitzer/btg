@@ -8,5 +8,4 @@ import com.btg.website.model.Customer;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
-
 }

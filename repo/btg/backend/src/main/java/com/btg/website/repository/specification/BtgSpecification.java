@@ -17,7 +17,7 @@ public class BtgSpecification<T> implements Specification<T> {
 	public BtgSpecification(final SearchCriteria criteria) {
 		this.criteria = criteria;
 	}
-	
+
 	public SearchCriteria getCriteria() {
 		return this.criteria;
 	}
