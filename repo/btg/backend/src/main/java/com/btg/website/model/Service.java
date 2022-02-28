@@ -1,19 +1,29 @@
 package com.btg.website.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="SERVICE_TABLE")
 public class Service {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@Column(name="name_of_service")
 	private String serviceName;
+	
+	@Column(name="service_description")
 	private String description;
+	
 	private double price;
 	
+	public Service() {}
 	public Service(String serviceName, String description, double price) {
 		this.serviceName = serviceName;
 		this.description = description;
@@ -46,6 +56,10 @@ public class Service {
 
 	public long getId() {
 		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override

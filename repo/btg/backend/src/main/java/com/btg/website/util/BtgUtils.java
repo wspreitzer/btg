@@ -3,7 +3,6 @@ package com.btg.website.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.btg.website.exception.InvalidRequestException;
@@ -12,8 +11,10 @@ import com.btg.website.repository.builder.BtgSpecificationBuilder;
 @Component
 public class BtgUtils {
 	
-	@Value("${btg.search.regex}")
-	private static String regex;
+	//@Value("${btg.search.regex}")
+	//private static String regex;
+	
+	private static String regex = "(\\w+?)(:|<|>)(\\w+?),";
 	
 	public static String createExceptionMessage(String entity, Long id) {
 		StringBuilder sb = new StringBuilder();
@@ -56,6 +57,4 @@ public class BtgUtils {
 		}
 		return builder;
 	}
-
-
 }
