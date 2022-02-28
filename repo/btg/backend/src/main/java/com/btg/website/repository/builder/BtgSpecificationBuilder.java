@@ -6,10 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
-<<<<<<< HEAD
-=======
 import org.springframework.stereotype.Component;
->>>>>>> main
 
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
