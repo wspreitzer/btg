@@ -1,6 +1,7 @@
 package com.btg.website.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -54,6 +55,10 @@ public class Customer {
 	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CreditCard> creditCards;
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Review> reviews = new ArrayList<>();
+
 
 	public Customer(String firstName, String lastName, Address billingAddress, Company company, String email, String phoneNumber,
 			String userName, String password) {
@@ -193,16 +198,26 @@ public class Customer {
 		this.creditCards = creditCards;
 	}
 	
+	public void addReview(Review review) {
+		reviews.add(review);
+		review.setCustomer(this);
+	}
+	
+	public void removeReview(Review review) {
+		reviews.remove(review);
+		review.setReview(null);
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
-
+	
 	@Override
 	public String toString() {
 		return super.toString();
