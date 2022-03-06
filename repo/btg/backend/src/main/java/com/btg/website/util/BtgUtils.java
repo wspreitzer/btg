@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
-import com.btg.website.exception.InvalidRequestException;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 
 @Component
@@ -14,7 +13,7 @@ public class BtgUtils {
 	//@Value("${btg.search.regex}")
 	//private String regex;
 
-	private static String regex = "(\\w+?)(:|<|>)(\\w+?),";
+	private static String regex = "(\\p{Punct}?)(\\w+?)(:|<|>)(\\p{Punct}?)(\\w+?)(\\p{Punct}?),";
 	
 	public static String createExceptionMessage(String entity, Long id) {
 		StringBuilder sb = new StringBuilder();
@@ -47,13 +46,7 @@ public class BtgUtils {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(search + ",");
 		while(matcher.find()) {
-			if(matcher.groupCount() == 3) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(3), "", "" );
-			} else if (matcher.groupCount() == 5) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
-			} else {
-				throw new InvalidRequestException();
-			}
+				builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(5), matcher.group(4), matcher.group(6));
 		}
 		return builder;
 	}

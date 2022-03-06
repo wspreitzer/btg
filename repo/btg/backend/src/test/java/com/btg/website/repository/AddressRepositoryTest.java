@@ -250,7 +250,7 @@ public class AddressRepositoryTest {
 	public void returnsAddressWhenCityNameOrStateisGiven() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address3, address4, address10));
 		results = addressRepo
-				.findAll(builder.with("city", ":", "Chicago", "", "").with("'", "state", ":", state5, "", "")
+				.findAll(builder.with("city", ":", "Chicago").with("'", "state", ":", state5, "", "")
 						.build(searchCriteria -> new BtgSpecification<Address>((SearchCriteria) searchCriteria)));
 		assertThat(results.size(), is(5));
 		assertThat(results, containsInAnyOrder(address, address2, address3, address4, address10));

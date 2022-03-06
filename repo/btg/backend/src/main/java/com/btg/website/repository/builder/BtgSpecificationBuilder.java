@@ -46,9 +46,8 @@ public class BtgSpecificationBuilder<T> {
 		return this;
 	}
 	
-	public BtgSpecificationBuilder<T> with(final String key, final String operation, final Object value, 
-			final String prefix, final String suffix) {
-		return this.with(null, key, operation, value, prefix, suffix);
+	public BtgSpecificationBuilder<T> with(final String key, final String operation, final Object value) {
+		return this.with(null, key, operation, value, null, null);
 	}
 	
 	public  Specification<T> build(Function<SearchCriteria, BtgSpecification<T>> converter) {
