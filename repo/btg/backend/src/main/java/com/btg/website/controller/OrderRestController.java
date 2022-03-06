@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.btg.website.exception.InvalidRequestException;
 import com.btg.website.exception.ResourceNotFoundException;
 import com.btg.website.model.Order;
 import com.btg.website.model.Status;
@@ -122,14 +121,7 @@ public class OrderRestController extends BtgRestController<Order> {
 		Matcher matcher = pattern.matcher(search + ",");
 		builder.with("customer", ":", 0L);
 		while (matcher.find()) {
-			if (matcher.groupCount() == 3) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-			} else if (matcher.groupCount() == 5) {
 				builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(5), matcher.group(4), matcher.group(6));
-
-			} else {
-				throw new InvalidRequestException();
-			}
 		}
 
 		Specification<Order> spec = builder

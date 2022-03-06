@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
-import com.btg.website.exception.InvalidRequestException;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 
 @Component

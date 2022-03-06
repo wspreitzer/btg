@@ -49,10 +49,9 @@ public class BtgSpecificationBuilder<T> {
 		params.add(new SearchCriteria(orIndicator, key, op, value));
 		return this;
 	}
-
-	public BtgSpecificationBuilder<T> with(final String key, 
-			final String operation, final Object value) {
-		return with(null, key, operation, value, null, null);
+	
+	public BtgSpecificationBuilder<T> with(final String key, final String operation, final Object value) {
+		return this.with(null, key, operation, value, null, null);
 	}
 	
 	public  Specification<T> build(Function<SearchCriteria, BtgSpecification<T>> converter) {
