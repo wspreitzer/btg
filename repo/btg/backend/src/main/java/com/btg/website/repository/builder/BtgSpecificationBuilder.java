@@ -5,14 +5,18 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.exception.InvalidRequestException;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@Scope(value=WebApplicationContext.SCOPE_REQUEST, proxyMode=ScopedProxyMode.TARGET_CLASS)
 @Component
 public class BtgSpecificationBuilder<T> {
 
@@ -46,9 +50,9 @@ public class BtgSpecificationBuilder<T> {
 		return this;
 	}
 
-	public BtgSpecificationBuilder<T> with(final String key, final String operation, final Object value, 
-			final String prefix, final String suffix) {
-		return this.with(null, key, operation, value, prefix, suffix);
+	public BtgSpecificationBuilder<T> with(final String key, 
+			final String operation, final Object value) {
+		return with(null, key, operation, value, null, null);
 	}
 	
 	public  Specification<T> build(Function<SearchCriteria, BtgSpecification<T>> converter) {

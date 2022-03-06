@@ -87,7 +87,7 @@ public class StateRepositoryTest {
 	public void givenNameOrAbv_whenGettingListOfStatees_thenCorrect() throws Exception {
 		when(stateRepo.findAll(any(Specification.class))).thenReturn(setupRepository(state,state2));
 		List<State> results = stateRepo
-				.findAll(builder.with("name", ":", "Arizona", "", "").with("'", "abv", ":", "FL", "", "")
+				.findAll(builder.with("name", ":", "Arizona").with("'", "abv", ":", "FL", "", "")
 						.build(searchCriteria -> new BtgSpecification<State>((SearchCriteria) searchCriteria)));
 		assertThat(results.size(), is(2));
 		assertThat(results, containsInAnyOrder(state, state2));

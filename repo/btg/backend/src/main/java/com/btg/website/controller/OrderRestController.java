@@ -120,12 +120,12 @@ public class OrderRestController extends BtgRestController<Order> {
 			@RequestParam(value = "search") String search) throws Exception {
 		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
 		Matcher matcher = pattern.matcher(search + ",");
-		builder.with("customer", ":", 0L, "", "");
+		builder.with("customer", ":", 0L);
 		while (matcher.find()) {
 			if (matcher.groupCount() == 3) {
-				builder.with(matcher.group(1), matcher.group(2), "", matcher.group(3), "");
+				builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
 			} else if (matcher.groupCount() == 5) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
+				builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(5), matcher.group(4), matcher.group(6));
 
 			} else {
 				throw new InvalidRequestException();
