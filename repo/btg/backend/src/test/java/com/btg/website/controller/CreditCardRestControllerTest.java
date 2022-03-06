@@ -182,10 +182,10 @@ public class CreditCardRestControllerTest {
 
 	@Test
 	public void returnsCreditCardWhenTypeBeginsWith() throws Exception {
-		when(creditCardRepo.findAll(any(Specification.class))).thenReturn(creditCardUtils.setupRepository(card2, card5));
+		when(creditCardRepo.findAll(any(Specification.class))).thenReturn(creditCardUtils.setupRepository(card, card5));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/creditCardsBySpecification/")
-						.param("search", "type:Exp*")
+						.param("search", "type:Vi*")
 						.accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isOk()).andReturn();
 						//.andExpect(jsonPath("$.type").value("Visa"))

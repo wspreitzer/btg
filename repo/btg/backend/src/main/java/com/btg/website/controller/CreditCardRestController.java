@@ -66,8 +66,8 @@ public class CreditCardRestController extends BtgRestController<CreditCard> {
 
 	@GetMapping("/rest/creditCardsBySpecification/")
 	public CollectionModel<EntityModel<CreditCard>> getUserCreditCardsBySpecification(@RequestParam(value="search") String search) throws Exception {
-		builder = BtgUtils.buildSearchCriteria(builder, search);
 		builder.with("customer", ":", 0, "", "");
+		builder = BtgUtils.buildSearchCriteria(builder, search);
 		
 		Specification<CreditCard> spec =  builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
 		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(spec).stream().map(assembler::toModel).collect(Collectors.toList());
