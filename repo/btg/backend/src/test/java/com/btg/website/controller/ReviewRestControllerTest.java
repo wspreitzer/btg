@@ -136,7 +136,7 @@ public class ReviewRestControllerTest {
 		when(reviewRepo.findAll(any(Specification.class))).thenReturn(reviewUtils.setupRepository(review));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/searchReviews")
-						.param("search", "review:This Place is Awesome")
+						.param("search", "review:ThisPlaceisAwesome")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -180,7 +180,7 @@ public class ReviewRestControllerTest {
 		when(reviewRepo.findAll(any(Specification.class))).thenReturn(reviewUtils.setupRepository(review, review2, review3));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/searchReviews")
-						.param("search", "review!This Place is Bad")
+						.param("search", "review!ThisPlaceIsBad")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());

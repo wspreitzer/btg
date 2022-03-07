@@ -198,14 +198,17 @@ public class CustomerRestControllerTest {
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
 	
-	/*
-	 * @Test public void returnsCustomerWhenLastNameEqauls2() throws Exception {
-	 * when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils
-	 * .setupRepository(customer)); MvcResult mvcResult = mockedRequest
-	 * .perform(get("/btg/rest/customerSearch/") .param("search", "lastName:Smith")
-	 * .accept(MediaType.APPLICATION_JSON)) .andExpect(status().isOk()).andReturn();
-	 * System.out.println(mvcResult.getResponse().getContentAsString()); }
-	 */
+	
+	  @Test 
+	  public void returnsCustomerWhenLastNameEqauls2() throws Exception {
+		  when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer)); 
+		  MvcResult mvcResult = mockedRequest
+				  .perform(get("/btg/rest/customerSearch/") 
+						  .param("search", "lastName:Smith")
+						  .accept(MediaType.APPLICATION_JSON)) 
+				  .andExpect(status().isOk()).andReturn();
+	  System.out.println(mvcResult.getResponse().getContentAsString()); }
+	 
 	
 	
 	@Test
@@ -252,8 +255,6 @@ public class CustomerRestControllerTest {
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
-	
-
 	
 	@Test
 	public void returnsCustomerWhenEmailEquals() throws Exception {

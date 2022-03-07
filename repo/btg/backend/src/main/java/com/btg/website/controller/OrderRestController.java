@@ -36,6 +36,7 @@ import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.OrderRepository;
 import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
+import com.btg.website.util.BtgUtils;
 import com.btg.website.util.OrderModelAssembler;
 import com.btg.website.util.SearchCriteria;
 import com.google.common.net.HttpHeaders;
@@ -117,12 +118,9 @@ public class OrderRestController extends BtgRestController<Order> {
 	@GetMapping("/rest/ordersBySpecification")
 	public CollectionModel<EntityModel<Order>> getCustomerOrdersBySpecification(
 			@RequestParam(value = "search") String search) throws Exception {
-		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-		Matcher matcher = pattern.matcher(search + ",");
+		
 		builder.with("customer", ":", 0L);
-		while (matcher.find()) {
-				builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(5), matcher.group(4), matcher.group(6));
-		}
+		builder = BtgUtils.buildSearchCriteria(builder, search);
 
 		Specification<Order> spec = builder
 				.build(searchCriteria -> new BtgSpecification<Order>((SearchCriteria) searchCriteria));
