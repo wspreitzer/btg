@@ -42,6 +42,10 @@ public class Address {
 		return this.id;
 	}
 	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 	public String getStreet() {
 		return this.street;
 	}

@@ -59,8 +59,12 @@ public class ReviewRestController extends BtgRestController<Review>{
 	ResponseEntity<EntityModel<Review>> createReview(@RequestBody Review review, HttpServletResponse response, HttpServletRequest request) {
 		Review newReview = reviewRepo.save(review);
 		return ResponseEntity
-				.created(linkTo(methodOn(ReviewRestController.class).getReviewById(newReview.getId())).toUri())
-				.header("Location", String.format("%S/btg/rest/review/%s", request.getContextPath(), newReview.getId(), null))
+			.created(linkTo(methodOn(ReviewRestController.class)
+					.getReviewById(newReview.getId())).toUri())
+				.header("Location", String.format
+						("%s/btg/rest/review/%s", 
+								request.getContextPath(), 
+								newReview.getId(), null))
 				.body(assembler.toModel(newReview));
 	}
 	

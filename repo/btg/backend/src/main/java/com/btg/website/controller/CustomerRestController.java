@@ -150,7 +150,8 @@ public class CustomerRestController extends BtgRestController<Customer> {
 	}
 
 	@PatchMapping(path = "/rest/customer/{id}", consumes = "application/json-patch+json")
-	public ResponseEntity<EntityModel<Customer>> updateCustomer(@PathVariable Long id, @RequestBody JsonPatch patch) {
+	public ResponseEntity<EntityModel<Customer>> updateCustomer(@PathVariable Long id, 
+			@RequestBody JsonPatch patch) {
 		ResponseEntity<EntityModel<Customer>> retVal;
 		try {
 			Customer customer = customerRepo.findById(id)
