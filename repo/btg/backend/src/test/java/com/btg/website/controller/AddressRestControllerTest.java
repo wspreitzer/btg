@@ -64,16 +64,16 @@ public class AddressRestControllerTest {
 	@BeforeEach
 	public void setup() {
 		addressUtils = new TestUtils<Address>();
-		address = new Address("1060_W_Addison", "Chicago", null, "60613");
-		address2 = new Address("1901 W_Madison", "Chicago", null, "60612");
-		address3 = new Address("333_W_35th_St", "Chicago", null, "60616");
-		address4 = new Address("233_S_Wacker_Dr", "Chicago", null, "60606");
-		address5 = new Address("20_W_34th_St", "New_York", null, "10001");
-		address6 = new Address("234_W_42nd_St", "New_York", null, "10036");
-		address7 = new Address("1600_Pennsylvania_Avenue_NW", "Washington", null, "20500");
-		address8 = new Address("First_St_SE", "Washington", null, "20004");
-		address9 = new Address("4_Jersey_St", "Boston", null, "02215");
-		address10 = new Address("3700_Hogge_Dr", "Parker", null, "75002");
+		address = new Address("1060 W Addison", "Chicago", null, "60613");
+		address2 = new Address("1901 W Madison", "Chicago", null, "60612");
+		address3 = new Address("333 W 35th St", "Chicago", null, "60616");
+		address4 = new Address("233 S Wacker Dr", "Chicago", null, "60606");
+		address5 = new Address("20 W 34th St", "New York", null, "10001");
+		address6 = new Address("234 W 42nd St", "New York", null, "10036");
+		address7 = new Address("1600 Pennsylvania Avenue NW", "Washington", null, "20500");
+		address8 = new Address("First St SE", "Washington", null, "20004");
+		address9 = new Address("4 Jersey St", "Boston", null, "02215");
+		address10 = new Address("3700 Hogge Dr", "Parker", null, "75002");
 		addressList = addressUtils.setupRepository(address, address2, address3, address4, address5, address6, address7, address8,
 				address9, address10);
 		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
@@ -127,7 +127,7 @@ public class AddressRestControllerTest {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(addressUtils.setupRepository(address));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/searchAddresses")
-						.param("search", "street:1060_W_Addison")
+						.param("search", "street:1060 W Addison")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -171,7 +171,7 @@ public class AddressRestControllerTest {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(addressUtils.setupRepository(address, address2, address3, address5, address6, address7, address8, address9, address10));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/searchAddresses")
-						.param("search", "street!233_S_Wacker_Dr")
+						.param("search", "street!233 S Wacker Dr")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());				
