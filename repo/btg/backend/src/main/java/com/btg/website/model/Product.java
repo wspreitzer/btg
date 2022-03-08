@@ -1,22 +1,27 @@
 package com.btg.website.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Product {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	private String name;
 	private String sku;
 	private String description;
 	private int qty;
 	private double price;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private WishList wishList;
 	
 	protected Product() {}
 	
@@ -64,22 +69,36 @@ public class Product {
 		return price;
 	}
 	
+	public WishList getWishList() {
+		return wishList;
+	}
+
+	public void setWishList(WishList wishList) {
+		this.wishList = wishList;
+	}
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return this.getClass().hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return super.equals(obj);
+		if(this == obj ) return true;
+		if (!(obj instanceof Product )) return false;
+		return id != null && id.equals(((Product) obj).getId());
 	}
 
 	@Override

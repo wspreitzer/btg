@@ -30,8 +30,8 @@ import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
-import com.mysql.cj.jdbc.result.ResultSetInternalMethods;
 
+@SuppressWarnings("unchecked")
 public class AddressRepositoryTest {
 
 	@MockBean
@@ -85,7 +85,6 @@ public class AddressRepositoryTest {
 		address10 = new Address("3700 Hogge Dr", "Parker", state5, "75002");
 		repository = setupRepository(address, address2, address3, address4, address5, address6, address7, address8,
 				address9, address10);
-
 	}
 
 	@Test
@@ -233,7 +232,7 @@ public class AddressRepositoryTest {
 	@Test
 	public void returnsAddressWhenCityEndsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address7, address8, address9));
-		results = addressRepo.findAll(new BtgSpecification(new SearchCriteria("city", SearchOperation.ENDS_WITH, "ton")));
+		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("city", SearchOperation.ENDS_WITH, "ton")));
 		assertThat(results.size(), is(3));
 		assertThat(results, containsInAnyOrder(address7, address8, address9));
 	}
@@ -251,7 +250,7 @@ public class AddressRepositoryTest {
 	public void returnsAddressWhenCityNameOrStateisGiven() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address, address2, address3, address4, address10));
 		results = addressRepo
-				.findAll(builder.with("city", ":", "Chicago", "", "").with("'", "state", ":", state5, "", "")
+				.findAll(builder.with("city", ":", "Chicago").with("'", "state", ":", state5, "", "")
 						.build(searchCriteria -> new BtgSpecification<Address>((SearchCriteria) searchCriteria)));
 		assertThat(results.size(), is(5));
 		assertThat(results, containsInAnyOrder(address, address2, address3, address4, address10));
@@ -285,7 +284,7 @@ public class AddressRepositoryTest {
 	@Test
 	public void returnsAddressWhenStreetEndsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address3,address5, address6, address9));
-		results = addressRepo.findAll(new BtgSpecification(new SearchCriteria("street", SearchOperation.ENDS_WITH, "st")));
+		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("street", SearchOperation.ENDS_WITH, "st")));
 		assertThat(results.size(), is(4));
 		assertThat(results, containsInAnyOrder(address3,address5, address6, address9));
 	}
@@ -328,7 +327,7 @@ public class AddressRepositoryTest {
 	@Test
 	public void returnsAddressWhenZipCodeEndsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(setupRepository(address3, address4, address6));
-		results = addressRepo.findAll(new BtgSpecification(new SearchCriteria("zipCode", SearchOperation.ENDS_WITH, "6")));
+		results = addressRepo.findAll(new BtgSpecification<Address>(new SearchCriteria("zipCode", SearchOperation.ENDS_WITH, "6")));
 		assertThat(results.size(), is(3));
 		assertThat(results, containsInAnyOrder(address3, address4, address6));
 	}

@@ -31,6 +31,7 @@ import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@SuppressWarnings("unchecked")
 public class CompanyRepositoryTest {
 
 	@MockBean
@@ -81,10 +82,10 @@ public class CompanyRepositoryTest {
 		assertThat(true, is(foundCompany.isPresent()));
 		assertThat(foundCompany.get().getName(), is("ABCC Corp"));
 		assertThat(foundCompany.get().getDiscount(), is(.05D));
-		assertThat(foundCompany.get().getAddress().getStreet(), is("20 W 34th St"));
-		assertThat(foundCompany.get().getAddress().getCity(), is("New York"));
-		assertThat(foundCompany.get().getAddress().getState(), is(state));
-		assertThat(foundCompany.get().getAddress().getZipCode(), is("10001"));
+		assertThat(foundCompany.get().getBillingAddress().getStreet(), is("20 W 34th St"));
+		assertThat(foundCompany.get().getBillingAddress().getCity(), is("New York"));
+		assertThat(foundCompany.get().getBillingAddress().getState(), is(state));
+		assertThat(foundCompany.get().getBillingAddress().getZipCode(), is("10001"));
 	}
 
 	@Test
@@ -101,10 +102,10 @@ public class CompanyRepositoryTest {
 		Company company = new Company("GHI", address, null, .45, "847-676-2644");
 		when(companyRepo.save(any(Company.class))).thenReturn(company);
 		Company newCompany = companyRepo.save(company);
-		assertThat(newCompany.getAddress().getStreet(), is("20 W 34th St"));
-		assertThat(newCompany.getAddress().getCity(), is("New York"));
-		assertThat(newCompany.getAddress().getState(), is(state));
-		assertThat(newCompany.getAddress().getZipCode(), is("10001"));
+		assertThat(newCompany.getBillingAddress().getStreet(), is("20 W 34th St"));
+		assertThat(newCompany.getBillingAddress().getCity(), is("New York"));
+		assertThat(newCompany.getBillingAddress().getState(), is(state));
+		assertThat(newCompany.getBillingAddress().getZipCode(), is("10001"));
 	}
 
 	@Test
@@ -305,7 +306,7 @@ public class CompanyRepositoryTest {
 		results = companyRepo
 				.findAll(new BtgSpecification<Company>(new SearchCriteria("phoneNumber", SearchOperation.NEGATION, "111-111-1111")));
 		assertThat(results.size(), is(3));
-		assertThat(results, containsInAnyOrder(company, company2, company3, company));
+		assertThat(results, containsInAnyOrder(company, company2, company3));
 	}
 
 

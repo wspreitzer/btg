@@ -25,7 +25,7 @@ public class Cart {
 	@JoinColumn(name="customer_id", referencedColumnName = "id")
 	private Customer customer;
 	
-	@OneToMany(mappedBy = "CART", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CartItem> items;
 	
 	private Date createdDate;
