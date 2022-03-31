@@ -29,8 +29,20 @@ public class CartItem {
 	private int qty;
 	private double lineTotal;
 
-	public long getId() {
+	public CartItem() {}
+	
+	public CartItem(Product product, int qty, double lineTotal) {
+		this.product = product;
+		this.qty = qty;
+		this.lineTotal = lineTotal;
+	}
+	
+	public Long getId() {
 		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public Cart getCart() {
