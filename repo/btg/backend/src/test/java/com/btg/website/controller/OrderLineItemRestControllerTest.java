@@ -11,47 +11,38 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Order;
 import com.btg.website.model.OrderLineItem;
 import com.btg.website.repository.OrderLineItemRepository;
+import com.btg.website.util.OrderLineItemModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes = { WebsiteApplication.class} )
+@WebMvcTest(OrderLineItemRestController.class)
 @SuppressWarnings("unchecked")
 public class OrderLineItemRestControllerTest {
 
 	@MockBean OrderLineItemRepository orderItemRepo;
-	
-	@Autowired private WebApplicationContext webApplicationContext;
+	@MockBean OrderLineItemModelAssembler assembler;
+	@Autowired
+	private MockMvc mockedRequest;
 	
 	private OrderLineItem orderItem, orderItem2, orderItem3, orderItem4;
 	private TestUtils<OrderLineItem> orderItemUtil;
 	private List<OrderLineItem> orderItemList;
-	private MockMvc mockedRequest;
 	private Order order;
 	
 	@BeforeEach
@@ -63,7 +54,6 @@ public class OrderLineItemRestControllerTest {
 		orderItem3 = new OrderLineItem(order, null, 3, 389.85);
 		orderItem4 = new OrderLineItem(order, null, 4, 51.75);
 		orderItemList =  orderItemUtil.setupRepository(orderItem, orderItem2, orderItem3, orderItem4);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}                                           
 
 	@Test

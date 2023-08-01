@@ -44,7 +44,6 @@ public class ReviewRestController extends BtgRestController<Review>{
 
 	@Autowired private ReviewRepository reviewRepo;
 	@Autowired private CustomerRepository customerRepo;
-	@Autowired private BtgSpecificationBuilder<Review> builder;
 	
 	private final ReviewModelAssembler assembler;
 	
@@ -52,6 +51,7 @@ public class ReviewRestController extends BtgRestController<Review>{
 
 	@Autowired
 	ReviewRestController(ReviewModelAssembler assembler) {
+		builder = new BtgSpecificationBuilder<Review>();
 		this.assembler = assembler;
 	}
 	

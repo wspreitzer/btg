@@ -21,43 +21,34 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Service;
 import com.btg.website.repository.ServiceRepository;
+import com.btg.website.util.ServiceModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
+@WebMvcTest(ServiceRestController.class)
 @SuppressWarnings("unchecked")
 public class ServiceRestControllerTest {
 	
 	@MockBean private ServiceRepository serviceRepo;
-	@InjectMocks private ServiceRestController controller;
-	@Autowired private WebApplicationContext webApplicationContext;
-	
+	@MockBean private ServiceModelAssembler assembler;
+	@Autowired 
 	private MockMvc mockedRequest;
+	
 	private TestUtils<Service> serviceUtils;
 	private Service service, service2, service3, service4;
 	private List<Service> serviceList;
@@ -70,7 +61,6 @@ public class ServiceRestControllerTest {
 		service3 = new Service("Social Media Platform", "We will create your great social media presence", 1499.95);
 		service4 = new Service("Webisite Hosting", "We will provide and host a great domain for you", 499.95);
 		serviceList = serviceUtils.setupRepository(service, service2, service3, service4);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	
 	@Test

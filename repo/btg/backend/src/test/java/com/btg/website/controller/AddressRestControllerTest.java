@@ -21,42 +21,34 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Address;
 import com.btg.website.repository.AddressRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
+import com.btg.website.util.AddressModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
+@WebMvcTest(AddressRestController.class)
 @SuppressWarnings("unchecked")
 public class AddressRestControllerTest {
 
 	@MockBean private AddressRepository addressRepo;
-	@Autowired private WebApplicationContext webApplicationContext;
+	@MockBean private AddressModelAssembler modelAssembler;
+	@Autowired private MockMvc mockedRequest;
 	
-	private MockMvc mockedRequest;
 	private TestUtils<Address> addressUtils;
 	private Address address, address2, address3, address4, address5, address6, address7, address8, address9, address10;
 	private List<Address> addressList;
@@ -76,7 +68,6 @@ public class AddressRestControllerTest {
 		address10 = new Address("3700 Hogge Dr", "Parker", null, "75002");
 		addressList = addressUtils.setupRepository(address, address2, address3, address4, address5, address6, address7, address8,
 				address9, address10);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	
 	@Test

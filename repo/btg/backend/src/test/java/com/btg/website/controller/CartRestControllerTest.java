@@ -1,41 +1,29 @@
 package com.btg.website.controller;
 
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-
-import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Cart;
 import com.btg.website.model.CartItem;
 import com.btg.website.model.Customer;
 import com.btg.website.model.Product;
 import com.btg.website.repository.CartItemRepository;
 import com.btg.website.repository.CartRepository;
-import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.ProductRepository;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes = {WebsiteApplication.class})
+@WebMvcTest(CartRestController.class)
 @SuppressWarnings("unchecked")
 public class CartRestControllerTest {
 	
@@ -43,8 +31,6 @@ public class CartRestControllerTest {
 	@MockBean private CartItemRepository cartItemRepo;
 	@MockBean private ProductRepository productRepo;
 	
-	@InjectMocks CartRestController controller;
-	@Autowired private WebApplicationContext webApplicationContext;
 	
 	private Cart cart, cart2, cart3, cart4;
 	private Customer customer, customer2, customer3, customer4;

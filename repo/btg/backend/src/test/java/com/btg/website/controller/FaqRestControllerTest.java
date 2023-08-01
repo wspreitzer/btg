@@ -21,46 +21,36 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Faq;
 import com.btg.website.repository.FaqRepository;
+import com.btg.website.util.FaqModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= { WebsiteApplication.class })
+@WebMvcTest(FaqRestController.class)
 @SuppressWarnings("unchecked")
 public class FaqRestControllerTest {
 
 	@MockBean FaqRepository faqRepo;
-	@InjectMocks FaqRestController controller;
-	@Autowired private WebApplicationContext webApplicationContext;
+	@MockBean FaqModelAssembler assembler;
 	
+	@Autowired
 	private MockMvc mockedRequest;
+	
 	private TestUtils<Faq> faqUtils;
 	private Faq faq, faq2, faq3, faq4;
 	private List<Faq> faqList;
@@ -73,7 +63,6 @@ public class FaqRestControllerTest {
 		faq3 = new Faq("What color is money", "Money is green");
 		faq4 = new Faq("What Day of the week is it", "It is Tuesday");
 		faqList = faqUtils.setupRepository(faq, faq2, faq3, faq4);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	
 	@Test

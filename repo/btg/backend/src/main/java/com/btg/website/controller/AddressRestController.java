@@ -42,14 +42,15 @@ import com.github.fge.jsonpatch.JsonPatchException;
 @RestController
 public class AddressRestController extends BtgRestController<Address> {
 
+	
 	@Autowired private AddressRepository addressRepo;
-	@Autowired private BtgSpecificationBuilder<Address> builder;
 	
 	private final AddressModelAssembler assembler;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Autowired
 	AddressRestController(AddressModelAssembler assembler) {
+		builder = new BtgSpecificationBuilder<Address>();
 		this.assembler = assembler;
 	}
 	

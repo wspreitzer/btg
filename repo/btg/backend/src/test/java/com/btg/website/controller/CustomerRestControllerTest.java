@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.sql.Date;
 import java.util.List;
@@ -27,45 +26,34 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Customer;
 import com.btg.website.repository.CustomerRepository;
+import com.btg.website.util.CustomerModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes = {WebsiteApplication.class})
+@WebMvcTest(CustomerRestController.class)
 @SuppressWarnings("unchecked")
 public class CustomerRestControllerTest {
 
 	@MockBean private CustomerRepository customerRepo;
+	@MockBean private CustomerModelAssembler modelAssembler;
+	@Autowired
+	private MockMvc mockedRequest;
 	
-	@InjectMocks CustomerRestController controller;
-	
-	@Autowired private WebApplicationContext webApplicationContext;
 	
 	private Customer customer, customer2, customer3, customer4;
 	
 	private List<Customer> customerList;
-	
-	private MockMvc mockedRequest;
 	
 	private Date signUpDate;
 	
@@ -73,6 +61,7 @@ public class CustomerRestControllerTest {
 	
 	@BeforeEach
 	public void setup() {
+
 		customer = new Customer("Bob", "Smith", "bob.smith@comcast.com", 
 				"222-805-2222", "user1", "p@ssword");
 		customer2 = new Customer("John", "smythe", "john.smythe@comcast.net", 
@@ -82,6 +71,7 @@ public class CustomerRestControllerTest {
 		customer4 = new Customer("Tom", "Garcia","tgarcia@company2.net", 
 				"773-805-3203", "tgarcia", "!P@ssW0rd");
 		customerUtils = new TestUtils<Customer>();
+		
 		signUpDate = new Date(System.currentTimeMillis());
 		
 		customer.setSignupDate(signUpDate);
@@ -95,7 +85,6 @@ public class CustomerRestControllerTest {
 		customer4.setId(4L);
 		
 		customerList = customerUtils.setupRepository(customer, customer2, customer3, customer4);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 
 	@Test

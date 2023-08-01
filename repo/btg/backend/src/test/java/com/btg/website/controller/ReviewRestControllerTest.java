@@ -15,50 +15,41 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Customer;
 import com.btg.website.model.Review;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.ReviewRepository;
+import com.btg.website.util.ReviewModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
+@WebMvcTest(ReviewRestController.class)
 @SuppressWarnings("unchecked")
 public class ReviewRestControllerTest {
 
 	@MockBean private ReviewRepository reviewRepo;
-	@Autowired private WebApplicationContext webApplicationContext;
-	
+	@MockBean private ReviewModelAssembler assembler;
+	@MockBean private CustomerRepository customerRepo;
+	@Autowired
 	private MockMvc mockedRequest;
+	
 	private TestUtils<Review> reviewUtils;
 	private Review review, review2, review3, review4;
 	private Customer customer;
@@ -76,8 +67,6 @@ public class ReviewRestControllerTest {
 		review3 = new Review(customer, "This Joint is Awesome", date);
 		review4 = new Review(customer, "This Place is Bad", new Date(System.currentTimeMillis()));
 		reviewList = reviewUtils.setupRepository(review, review2, review3, review4);
-		this.mockedRequest = webAppContextSetup(
-				webApplicationContext).build();
 	}
 	
 	@Test

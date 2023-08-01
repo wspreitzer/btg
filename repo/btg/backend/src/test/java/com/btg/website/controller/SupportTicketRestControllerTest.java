@@ -21,45 +21,38 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Customer;
 import com.btg.website.model.SupportTicket;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.SupportTicketRepository;
+import com.btg.website.util.SupportTicketModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes = {WebsiteApplication.class})
+@WebMvcTest(SupportTicketRestController.class)
 @SuppressWarnings("unchecked")
 public class SupportTicketRestControllerTest {
 
 	@MockBean private SupportTicketRepository supportTicketRepo;
 	@MockBean private CustomerRepository customerRepo;
-	@InjectMocks SupportTicketRestController controller;
-	@Autowired private WebApplicationContext webApplicationContext;
-	
+	@MockBean private SupportTicketModelAssembler assembler;
+	@Autowired
 	private MockMvc mockedRequest;
+	
 	private TestUtils<SupportTicket> supportTicketUtils;
 	private TestUtils<Customer> customerUtils;
 	private SupportTicket ticket, ticket2, ticket3, ticket4;
@@ -79,7 +72,6 @@ public class SupportTicketRestControllerTest {
 		ticket3 = new SupportTicket("Database is down", "Database is down", createDate, "resolved", customer);
 		ticket4 = new SupportTicket("Emails are coming back as undeliverable", "All emails sent through my website are coming back as undeliverable", createDate, "closed", customer);
 		supportTicketList = supportTicketUtils.setupRepository(ticket, ticket2, ticket3, ticket4);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	
 	@Test

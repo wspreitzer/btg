@@ -21,46 +21,34 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Product;
 import com.btg.website.repository.ProductRepository;
+import com.btg.website.util.ProductModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes = {WebsiteApplication.class})
+@WebMvcTest(ProductRestController.class)
 @SuppressWarnings("unchecked")
 public class ProductRestControllerTest {
 
 	@MockBean private ProductRepository productRepo;
-
-	@InjectMocks ProductRestController controller;
+	@MockBean private ProductModelAssembler assembler;
 	
-	@Autowired private WebApplicationContext webApplicationContext;
-	
-	
+	@Autowired
 	private MockMvc mockedRequest;
 	private TestUtils<Product> productUtils;
 	private Product product, product2, product3, product4;
@@ -74,7 +62,6 @@ public class ProductRestControllerTest {
 		product3 = new Product("BTG Hockey Jersey", "5486-58551-XL", "Red Hockey Jersey size Xtra large", 55, 129.95);
 		product4 = new Product("BTG Mousepad", "5486-2345-MP", "Mouse pad", 45, 12.95);
 		productList = productUtils.setupRepository(product, product2, product3, product4);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	
 	@Test

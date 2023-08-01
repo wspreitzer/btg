@@ -22,38 +22,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.CreditCard;
 import com.btg.website.model.Customer;
 import com.btg.website.repository.CreditCardRepository;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.specification.BtgSpecification;
+import com.btg.website.util.CreditCardModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
+@WebMvcTest(CreditCardRestController.class)
 @SuppressWarnings("unchecked")
 public class CreditCardRestControllerTest {
 	
@@ -62,8 +53,9 @@ public class CreditCardRestControllerTest {
 	
 	@MockBean private CustomerRepository customerRepo;
 	
-	@Autowired private WebApplicationContext webApplicationContext;
+	@MockBean private CreditCardModelAssembler assembler;
 	
+	@Autowired
 	private MockMvc mockedRequest;
 	private TestUtils<CreditCard> creditCardUtils;
 	private CreditCard card, card2, card3, card4, card5;
@@ -85,7 +77,6 @@ public class CreditCardRestControllerTest {
 		customer.setSignupDate(new Date(System.currentTimeMillis()));
 		customers.add(customer);
 		when(customerRepo.findAll(any(BtgSpecification.class))).thenReturn(customers);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	 
 	@Test

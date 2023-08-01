@@ -22,44 +22,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Customer;
 import com.btg.website.model.Product;
 import com.btg.website.model.WishList;
 import com.btg.website.repository.WishListRepository;
 import com.btg.website.util.TestUtils;
+import com.btg.website.util.WishListModelAssembler;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
+@WebMvcTest(WishListRestController.class)
+@SuppressWarnings("unchecked")
 public class WishListRestControllerTest {
 	
 	@MockBean WishListRepository wishListRepo;
-	@InjectMocks WishListRestController controller;
-	@Autowired private WebApplicationContext webApplicationContext;
-	
+	@MockBean WishListModelAssembler assembler;
+	@Autowired
 	private MockMvc mockedRequest;
+	
 	private TestUtils<WishList> wishListUtils;
 	private WishList wishList;
 	private Customer customer;
@@ -80,7 +75,6 @@ public class WishListRestControllerTest {
 		wishList = new WishList(customer, productList, new Date(System.currentTimeMillis()));
 		wishListUtils = new TestUtils<WishList>();
 		wishListList = wishListUtils.setupRepository(wishList);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 	
 	@Test

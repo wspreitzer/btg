@@ -16,57 +16,45 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.btg.website.WebsiteApplication;
-import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Order;
 import com.btg.website.model.Status;
+import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.OrderRepository;
+import com.btg.website.util.OrderModelAssembler;
 import com.btg.website.util.TestUtils;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= { WebsiteApplication.class })
+@WebMvcTest(OrderRestController.class)
 @SuppressWarnings("unchecked")
 public class OrderRestControllerTest {
 
 	@MockBean private OrderRepository orderRepo;
-	
-	@InjectMocks OrderRestController controller;
-	
-	@Autowired private WebApplicationContext webApplicationContext;
+	@MockBean private CustomerRepository customerRepo;
+	@MockBean private OrderModelAssembler assembler;
+	@Autowired
+	private MockMvc mockedRequest;
 
 	private Order order, order2, order3, order4, order5, order6, order7, order8;
 	private List<Order> orderList;
 	private TestUtils<Order> orderUtils;
-	private MockMvc mockedRequest;
 	private Date orderDate;
 	
 	@BeforeEach
@@ -107,7 +95,6 @@ public class OrderRestControllerTest {
 		order7.setOrderStatus(Status.COMPLETED);
 		order8.setOrderStatus(Status.CANCELED);
 		orderList = orderUtils.setupRepository(order, order2, order3, order4, order5, order6, order7, order8);
-		this.mockedRequest = webAppContextSetup(webApplicationContext).build();
 	}
 
 	@Test
