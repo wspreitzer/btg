@@ -35,7 +35,6 @@ import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(AddressRepository.class)
 @SuppressWarnings("unchecked")
 public class AddressRepositoryTest {
 

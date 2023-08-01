@@ -6,12 +6,11 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.test.web.servlet.MockMvc;
 
 import com.btg.website.model.Cart;
 import com.btg.website.model.CartItem;
@@ -20,6 +19,8 @@ import com.btg.website.model.Product;
 import com.btg.website.repository.CartItemRepository;
 import com.btg.website.repository.CartRepository;
 import com.btg.website.repository.ProductRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
+import com.btg.website.util.CartModelAssembler;
 import com.btg.website.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
@@ -30,6 +31,9 @@ public class CartRestControllerTest {
 	@MockBean private CartRepository cartRepo;
 	@MockBean private CartItemRepository cartItemRepo;
 	@MockBean private ProductRepository productRepo;
+	@MockBean private CartModelAssembler assembler;
+	@MockBean private BtgSpecificationBuilder<Cart> builder;
+	@Autowired private MockMvc mockedRequest;
 	
 	
 	private Cart cart, cart2, cart3, cart4;
