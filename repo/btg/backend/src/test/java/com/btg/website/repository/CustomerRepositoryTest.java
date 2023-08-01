@@ -36,20 +36,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.btg.website.WebsiteApplication;
 import com.btg.website.config.JacksonConfig;
 import com.btg.website.model.Customer;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JacksonConfig.class})
-@Transactional
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment=WebEnvironment.MOCK, classes= {WebsiteApplication.class})
 @SuppressWarnings("unchecked")
 public class CustomerRepositoryTest {
 
-	@MockBean
-	CustomerRepository customerRepo;
+	@MockBean CustomerRepository customerRepo;
 	
 	private Customer customer, customer2, customer3, customer4;
 	private Date signUpDate;
@@ -69,6 +65,11 @@ public class CustomerRepositoryTest {
 				"773-805-3203", "tgarcia", "!P@ssW0rd");
 		
 		signUpDate = new Date(System.currentTimeMillis());
+		customer.setId(1L);
+		customer2.setId(2L);
+		customer3.setId(3L);
+		customer4.setId(4L);
+		
 		repository = setupRepository(customer, customer2, customer3, customer4);
 	}
 	

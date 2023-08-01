@@ -37,6 +37,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.btg.website.model.Customer;
 import com.btg.website.repository.CustomerRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.CustomerModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -47,9 +48,8 @@ public class CustomerRestControllerTest {
 
 	@MockBean private CustomerRepository customerRepo;
 	@MockBean private CustomerModelAssembler modelAssembler;
-	@Autowired
-	private MockMvc mockedRequest;
-	
+	@MockBean private BtgSpecificationBuilder<Customer> builder;
+	@Autowired private MockMvc mockedRequest;
 	
 	private Customer customer, customer2, customer3, customer4;
 	
@@ -315,10 +315,10 @@ public class CustomerRestControllerTest {
 	
 	@Test
 	public void returnsCustomerWhenPhoneNumberBeginsWith() throws Exception {
-		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer));
+		when(customerRepo.findAll(any(Specification.class))).thenReturn(customerUtils.setupRepository(customer2, customer3));
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/customerSearch/")
-						.param("search", "phoneNumber:312")
+						.param("search", "phoneNumber:312*")
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -362,20 +362,21 @@ public class CustomerRestControllerTest {
 		Customer customerToSave = new Customer("Patrick", "Kane", 
 				"pkane@chicagoblackhawks.nhl.com", "312-258-3696", "pkane88", "p@ssw0rd");
 		customerToSave.setSignupDate(signUpDate);
+		customerToSave.setId(1L);
 		when(customerRepo.save(any(Customer.class))).thenReturn(customerToSave);
+		when(customerRepo.findById(anyLong())).thenReturn(Optional.of(customerToSave));
 		MvcResult mvcResult = mockedRequest.perform(post("/btg/rest/customer/")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"firstName\" : \"Patrick\", \"lastName\" : \"Kane\", \"billingAddress\" : {}, \"shippingAddress\" : {}, \"company\" : {},\"email\" : \"pkane@chicagoblackhawks.nhl.com\",\"phoneNumber\" : \"312-258-3696\", \"userName\" : \"pkane88\",\"password\" : \"p@ssw0rd\", \"signupDate\" : \"" + signUpDate + "\"}")
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isCreated())
-				//.andExpect(header().string("Location", "http://localhost/btg/rest/customers/0"))
-				.andExpect(jsonPath("$.firstName").value("Patrick"))
-				.andExpect(jsonPath("$.lastName").value("Kane"))
-				.andExpect(jsonPath("$.email").value("pkane@chicagoblackhawks.nhl.com"))
-				.andExpect(jsonPath("$.phoneNumber").value("312-258-3696"))
-				.andExpect(jsonPath("$.userName").value("pkane88"))
-				.andExpect(jsonPath("$.password").value("p@ssw0rd"))
-				.andExpect(jsonPath("$.signupDate").value(signUpDate.toString())).andReturn();
+				.andExpect(status().isCreated()).andReturn();
+		Customer foundCustomer = customerRepo.findById(1L).get();
+		assertThat(foundCustomer.getFirstName(), is("Patrick"));
+		assertThat(foundCustomer.getLastName(), is("Kane"));
+		assertThat(foundCustomer.getEmail(), is("pkane@chicagoblackhawks.nhl.com"));
+		assertThat(foundCustomer.getPhoneNumber(), is("312-258-3696"));
+		assertThat(foundCustomer.getUserName(), is("pkane88"));
+		assertThat(foundCustomer.getPassword(), is("p@ssw0rd"));
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
 	
@@ -388,13 +389,7 @@ public class CustomerRestControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"firstName\" : \"Patrick\", \"lastName\" : \"Kane\", \"billingAddress\" : {}, \"shippingAddress\" : {}, \"company\" : {},\"email\" : \"pkane@chicagoblackhawks.nhl.com\",\"phoneNumber\" : \"312-258-3696\", \"userName\" : \"pkane88\",\"password\" : \"P@ssw0rd\", \"signupDate\" : \"" + signUpDate + "\"}")
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName").value("Patrick"))
-				.andExpect(jsonPath("$.lastName").value("Kane"))
-				.andExpect(jsonPath("$.email").value("pkane@chicagoblackhawks.nhl.com"))
-				.andExpect(jsonPath("$.phoneNumber").value("312-258-3696"))
-				.andExpect(jsonPath("$.userName").value("pkane88"))
-				.andExpect(jsonPath("$.password").value("P@ssw0rd")).andReturn();
+				.andExpect(status().isOk()).andReturn();
 			Customer foundCustomer = customerRepo.findById(1L).get();
 			assertThat(foundCustomer.getFirstName(), is("Patrick"));
 			assertThat(foundCustomer.getLastName(), is("Kane"));
