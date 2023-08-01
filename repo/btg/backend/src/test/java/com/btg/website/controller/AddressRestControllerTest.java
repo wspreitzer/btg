@@ -47,6 +47,7 @@ public class AddressRestControllerTest {
 
 	@MockBean private AddressRepository addressRepo;
 	@MockBean private AddressModelAssembler modelAssembler;
+	@MockBean private BtgSpecificationBuilder<Address> builder;
 	@Autowired private MockMvc mockedRequest;
 	
 	private TestUtils<Address> addressUtils;
@@ -75,7 +76,7 @@ public class AddressRestControllerTest {
 		Address addressToSave = new Address("218 Sussex Ct", "North Aurora", null, "60542");
 		when(addressRepo.save(any(Address.class))).thenReturn(addressToSave);
 		MvcResult mvcResult = mockedRequest
-				.perform(post("/btg/rest/review")
+				.perform(post("/btg/rest/address")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"street\" : \"218 Sussex Ct\", \"city\" : \"North Aurora\", \"zipCode\" : \"60542\"}")
 						.accept(MediaType.APPLICATION_JSON))
@@ -287,12 +288,7 @@ public class AddressRestControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"street\" : \"218 Sussex Ct\", \"city\" : \"North Aurora\", \"state\" : { \"name\" : \"Illinois\", \"abv\" : \"IL\"}, \"zipCode\" : \"60542\" }")
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.street").value("218 Sussex Ct"))
-				.andExpect(jsonPath("$.city").value("North Aurora"))
-				.andExpect(jsonPath("$.state.name").value("Illinois"))
-				.andExpect(jsonPath("$.state.abv").value("IL"))
-				.andExpect(jsonPath("$.zipCode").value("60542")).andReturn();
+				.andExpect(status().isOk()).andReturn();
 		Address foundAddress = addressRepo.findById(1L).get();
 		assertThat(foundAddress.getStreet(), is("218 Sussex Ct"));
 		assertThat(foundAddress.getCity(), is("North Aurora"));

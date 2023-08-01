@@ -21,8 +21,11 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.btg.website.model.Address;
 import com.btg.website.model.State;
@@ -31,14 +34,13 @@ import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(AddressRepository.class)
 @SuppressWarnings("unchecked")
 public class AddressRepositoryTest {
 
-	@MockBean
-	AddressRepository addressRepo;
-
-	@MockBean
-	StateRepository stateRepo;
+	@MockBean AddressRepository addressRepo;
+	@MockBean StateRepository stateRepo;
 	
 	private Address address, address2, address3, address4, address5, address6, address7, address8, address9, address10;
 	private State state, state2, state3, state4, state5;
