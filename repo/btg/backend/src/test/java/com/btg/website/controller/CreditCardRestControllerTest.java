@@ -67,6 +67,11 @@ public class CreditCardRestControllerTest {
 		card3 = new CreditCard(null, "American Express", "354867813057915", "04","24", "7176");
 		card4 = new CreditCard(null, "Discover", "6011245599887744", "07","24", "855");
 		card5 = new CreditCard(null, "Visa", "4234567890123456","04","24","557");
+		card.setId(1L);
+		card2.setId(2L);
+		card3.setId(3L);
+		card4.setId(4L);
+		card5.setId(5L);
 		creditCardList = creditCardUtils.setupRepository(card, card2, card3, card4);
 
 		List<Customer> customers = new ArrayList<Customer>();
@@ -74,6 +79,7 @@ public class CreditCardRestControllerTest {
 		customer.setSignupDate(new Date(System.currentTimeMillis()));
 		customers.add(customer);
 		when(customerRepo.findAll(any(BtgSpecification.class))).thenReturn(customers);
+		when(assembler.toModel(any(CreditCard.class))).thenCallRealMethod();
 	}
 	 
 	@Test

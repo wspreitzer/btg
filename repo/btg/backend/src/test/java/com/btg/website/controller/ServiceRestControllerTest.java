@@ -36,6 +36,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.model.Service;
 import com.btg.website.repository.ServiceRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.ServiceModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -46,8 +47,8 @@ public class ServiceRestControllerTest {
 	
 	@MockBean private ServiceRepository serviceRepo;
 	@MockBean private ServiceModelAssembler assembler;
-	@Autowired 
-	private MockMvc mockedRequest;
+	@MockBean private BtgSpecificationBuilder<Service> builder;
+	@Autowired private MockMvc mockedRequest;
 	
 	private TestUtils<Service> serviceUtils;
 	private Service service, service2, service3, service4;
@@ -61,6 +62,7 @@ public class ServiceRestControllerTest {
 		service3 = new Service("Social Media Platform", "We will create your great social media presence", 1499.95);
 		service4 = new Service("Webisite Hosting", "We will provide and host a great domain for you", 499.95);
 		serviceList = serviceUtils.setupRepository(service, service2, service3, service4);
+		when(assembler.toModel(any(Service.class))).thenCallRealMethod();
 	}
 	
 	@Test

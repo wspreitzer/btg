@@ -15,6 +15,7 @@ public class FaqModelAssembler implements RepresentationModelAssembler<Faq, Enti
 	
 	@Override
 	public EntityModel<Faq> toModel(Faq faq) {
+		System.out.println("Why is this never called?");
 		return EntityModel.of(faq,
 				linkTo(methodOn(FaqRestController.class).getFaqById(faq.getId())).withSelfRel(),
 				linkTo(methodOn(FaqRestController.class).getAllFaqs()).withRel("faqs"));

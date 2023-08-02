@@ -21,14 +21,17 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.btg.website.model.Faq;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
 
+@ExtendWith(SpringExtension.class)
 @SuppressWarnings("unchecked")
 public class FaqRepositoryTest {
 

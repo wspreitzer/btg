@@ -1,6 +1,7 @@
 package com.btg.website.controller;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
 
@@ -56,5 +57,6 @@ public class CartRestControllerTest {
 		when(cartItemRepo.findById(2L)).thenReturn(Optional.of(new CartItem(product2, 0, 0)));
 		when(cartItemRepo.findById(3L)).thenReturn(Optional.of(new CartItem(product3, 0, 0)));
 		when(cartItemRepo.findById(4L)).thenReturn(Optional.of(new CartItem(product4, 0, 0)));
+		when(assembler.toModel(any(Cart.class))).thenCallRealMethod();
 	}
 }

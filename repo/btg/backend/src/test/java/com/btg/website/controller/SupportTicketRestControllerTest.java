@@ -39,6 +39,7 @@ import com.btg.website.model.Customer;
 import com.btg.website.model.SupportTicket;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.SupportTicketRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.SupportTicketModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -50,8 +51,8 @@ public class SupportTicketRestControllerTest {
 	@MockBean private SupportTicketRepository supportTicketRepo;
 	@MockBean private CustomerRepository customerRepo;
 	@MockBean private SupportTicketModelAssembler assembler;
-	@Autowired
-	private MockMvc mockedRequest;
+	@MockBean private BtgSpecificationBuilder<SupportTicket> builder;
+	@Autowired private MockMvc mockedRequest;
 	
 	private TestUtils<SupportTicket> supportTicketUtils;
 	private TestUtils<Customer> customerUtils;
@@ -72,6 +73,7 @@ public class SupportTicketRestControllerTest {
 		ticket3 = new SupportTicket("Database is down", "Database is down", createDate, "resolved", customer);
 		ticket4 = new SupportTicket("Emails are coming back as undeliverable", "All emails sent through my website are coming back as undeliverable", createDate, "closed", customer);
 		supportTicketList = supportTicketUtils.setupRepository(ticket, ticket2, ticket3, ticket4);
+		when(assembler.toModel(any(SupportTicket.class))).thenCallRealMethod();
 	}
 	
 	@Test

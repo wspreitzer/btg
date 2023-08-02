@@ -14,9 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +30,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.model.Address;
 import com.btg.website.repository.AddressRepository;
@@ -46,7 +43,7 @@ import com.btg.website.util.TestUtils;
 public class AddressRestControllerTest {
 
 	@MockBean private AddressRepository addressRepo;
-	@MockBean private AddressModelAssembler modelAssembler;
+	@MockBean private AddressModelAssembler assembler;
 	@MockBean private BtgSpecificationBuilder<Address> builder;
 	@Autowired private MockMvc mockedRequest;
 	
@@ -69,6 +66,7 @@ public class AddressRestControllerTest {
 		address10 = new Address("3700 Hogge Dr", "Parker", null, "75002");
 		addressList = addressUtils.setupRepository(address, address2, address3, address4, address5, address6, address7, address8,
 				address9, address10);
+		when(assembler.toModel(any(Address.class))).thenCallRealMethod();
 	}
 	
 	@Test
@@ -128,6 +126,7 @@ public class AddressRestControllerTest {
 	@Test
 	public void returnsAddressWhenStreetBeginsWith() throws Exception {
 		when(addressRepo.findAll(any(Specification.class))).thenReturn(addressUtils.setupRepository(address2));
+		when(assembler.toModel(address2)).thenCallRealMethod();
 		MvcResult mvcResult = mockedRequest
 				.perform(get("/btg/rest/searchAddresses")
 						.param("search", "street:1901*")

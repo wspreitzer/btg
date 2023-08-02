@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +23,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
@@ -37,19 +36,19 @@ import org.springframework.util.MultiValueMap;
 
 import com.btg.website.model.Faq;
 import com.btg.website.repository.FaqRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.FaqModelAssembler;
 import com.btg.website.util.TestUtils;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(FaqRestController.class)
 @SuppressWarnings("unchecked")
 public class FaqRestControllerTest {
 
 	@MockBean FaqRepository faqRepo;
 	@MockBean FaqModelAssembler assembler;
-	
-	@Autowired
-	private MockMvc mockedRequest;
+	@MockBean private BtgSpecificationBuilder<Faq> builder;
+	@Autowired private MockMvc mockedRequest;
 	
 	private TestUtils<Faq> faqUtils;
 	private Faq faq, faq2, faq3, faq4;
@@ -62,7 +61,12 @@ public class FaqRestControllerTest {
 		faq2 = new Faq("What color is the sky", "The sky is blue");
 		faq3 = new Faq("What color is money", "Money is green");
 		faq4 = new Faq("What Day of the week is it", "It is Tuesday");
+		faq.setId(1L);
+		faq2.setId(2L);
+		faq3.setId(3L);
+		faq4.setId(4L);
 		faqList = faqUtils.setupRepository(faq, faq2, faq3, faq4);
+		when(assembler.toModel(any(Faq.class))).thenCallRealMethod();
 	}
 	
 	@Test

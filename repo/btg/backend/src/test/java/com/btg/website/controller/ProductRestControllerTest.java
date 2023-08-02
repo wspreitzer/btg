@@ -37,6 +37,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.model.Product;
 import com.btg.website.repository.ProductRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.ProductModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -47,9 +48,9 @@ public class ProductRestControllerTest {
 
 	@MockBean private ProductRepository productRepo;
 	@MockBean private ProductModelAssembler assembler;
+	@MockBean private BtgSpecificationBuilder<Product> builder;
+	@Autowired private MockMvc mockedRequest;
 	
-	@Autowired
-	private MockMvc mockedRequest;
 	private TestUtils<Product> productUtils;
 	private Product product, product2, product3, product4;
 	private List<Product> productList;
@@ -62,6 +63,7 @@ public class ProductRestControllerTest {
 		product3 = new Product("BTG Hockey Jersey", "5486-58551-XL", "Red Hockey Jersey size Xtra large", 55, 129.95);
 		product4 = new Product("BTG Mousepad", "5486-2345-MP", "Mouse pad", 45, 12.95);
 		productList = productUtils.setupRepository(product, product2, product3, product4);
+		when(assembler.toModel(any(Product.class))).thenCallRealMethod();
 	}
 	
 	@Test

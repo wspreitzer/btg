@@ -82,6 +82,9 @@ public class CreditCard {
 		this.cvv = cvv;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public long getId() {
 		return id;
 	}

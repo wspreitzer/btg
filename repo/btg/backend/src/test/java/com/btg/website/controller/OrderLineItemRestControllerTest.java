@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +21,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.btg.website.model.Order;
 import com.btg.website.model.OrderLineItem;
 import com.btg.website.repository.OrderLineItemRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.OrderLineItemModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -37,6 +36,7 @@ public class OrderLineItemRestControllerTest {
 
 	@MockBean OrderLineItemRepository orderItemRepo;
 	@MockBean OrderLineItemModelAssembler assembler;
+	@MockBean private BtgSpecificationBuilder<OrderLineItem> builder;
 	@Autowired
 	private MockMvc mockedRequest;
 	
@@ -54,6 +54,7 @@ public class OrderLineItemRestControllerTest {
 		orderItem3 = new OrderLineItem(order, null, 3, 389.85);
 		orderItem4 = new OrderLineItem(order, null, 4, 51.75);
 		orderItemList =  orderItemUtil.setupRepository(orderItem, orderItem2, orderItem3, orderItem4);
+		when(assembler.toModel(any(OrderLineItem.class))).thenCallRealMethod();
 	}                                           
 
 	@Test

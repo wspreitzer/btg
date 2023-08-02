@@ -67,30 +67,17 @@ public class AddressRestController extends BtgRestController<Address> {
 	
 	@GetMapping("/admin/rest/addresses")
 	public CollectionModel<EntityModel<Address>> getAddresses() {
-		List<Address> addressList = addressRepo.findAll();
-		List<EntityModel<Address>> addresses = new ArrayList<>();
-		CollectionModel<EntityModel<Address>> colModel = CollectionModel.empty();
-		if(addressList.size() > 0 ) {
-			for (Address anAddress : addressList) {
-				EntityModel<Address> model = assembler.toModel(anAddress);
-				addresses.add(model);
-			}
-			return colModel;
+		List<EntityModel<Address>> addresses = addressRepo
+				.findAll()
+				.stream()
+				.map(assembler::toModel)
+				.collect(toList());
+		if(addresses.size() > 0) {
+			return CollectionModel.of(addresses, 
+					linkTo(methodOn(AddressRestController.class).getAddresses()).withSelfRel());
 		} else {
 			throw new ResourceNotFoundException();
 		}
-		
-//		List<EntityModel<Address>> addresses = addressRepo
-//				.findAll()
-//				.stream()
-//				.map(assembler::toModel)
-//				.collect(toList());
-//		if(addresses.size() > 0) {
-//			return CollectionModel.of(addresses, 
-//					linkTo(methodOn(AddressRestController.class).getAddresses()).withSelfRel());
-//		} else {
-//			throw new ResourceNotFoundException();
-//		}
 	}
 	
 	@GetMapping("/rest/address/{id}")
@@ -103,29 +90,16 @@ public class AddressRestController extends BtgRestController<Address> {
 	public CollectionModel<EntityModel<Address>> searchAddresses(@RequestParam(value ="search") String search) {
 		builder = BtgUtils.buildSearchCriteria(builder, search);
 		Specification<Address> spec = builder.build(searchCriteria -> new BtgSpecification<Address>((SearchCriteria) searchCriteria));
-		List<Address> addressList = addressRepo.findAll(spec);
-		List<EntityModel<Address>> addresses = new ArrayList<>();
-		CollectionModel<EntityModel<Address>> colModel = CollectionModel.empty();
+		List<EntityModel<Address>> addressList = addressRepo.findAll(spec)
+				.stream()
+				.map(assembler::toModel)
+				.collect(toList());
 		if(addressList.size() > 0) {
-			for (Address anAddress : addressList) {
-				EntityModel<Address> model = assembler.toModel(anAddress);
-				addresses.add(model);
-			}
-			return colModel;
+			return CollectionModel.of(addressList,
+					linkTo(methodOn(AddressRestController.class).searchAddresses(search)).withSelfRel());
 		} else {
 			throw new ResourceNotFoundException("Address", builder);
 		}
-		
-//		List<EntityModel<Address>> addressList = addressRepo.findAll(spec)
-//				.stream()
-//				.map(assembler::toModel)
-//				.collect(toList());
-//		if(addressList.size() > 0) {
-//			return CollectionModel.of(addressList,
-//					linkTo(methodOn(AddressRestController.class).searchAddresses(search)).withSelfRel());
-//		} else {
-//			throw new ResourceNotFoundException("Address", builder);
-//		}
 	}
 	
 	@PatchMapping(path = "/rest/address/{id}", consumes = "application/json-patch+json")

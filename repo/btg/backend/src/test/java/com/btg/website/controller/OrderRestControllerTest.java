@@ -37,6 +37,7 @@ import com.btg.website.model.Order;
 import com.btg.website.model.Status;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.OrderRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.OrderModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -49,6 +50,7 @@ public class OrderRestControllerTest {
 	@MockBean private OrderRepository orderRepo;
 	@MockBean private CustomerRepository customerRepo;
 	@MockBean private OrderModelAssembler assembler;
+	@MockBean private BtgSpecificationBuilder<Order> builder;
 	@Autowired
 	private MockMvc mockedRequest;
 
@@ -95,6 +97,7 @@ public class OrderRestControllerTest {
 		order7.setOrderStatus(Status.COMPLETED);
 		order8.setOrderStatus(Status.CANCELED);
 		orderList = orderUtils.setupRepository(order, order2, order3, order4, order5, order6, order7, order8);
+		when(assembler.toModel(any(Order.class))).thenCallRealMethod();
 	}
 
 	@Test

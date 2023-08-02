@@ -23,20 +23,29 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.btg.website.controller.WishListRestController;
 import com.btg.website.model.Product;
 import com.btg.website.model.WishList;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.repository.specification.BtgSpecification;
 import com.btg.website.util.SearchCriteria;
 import com.btg.website.util.SearchOperation;
+import com.btg.website.util.WishListModelAssembler;
 
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(WishListRestController.class)
 @SuppressWarnings("unchecked")
 public class WishListRepositoryTest {
 	
-	@MockBean
-	private WishListRepository wishListRepo;
+	@MockBean private WishListRepository wishListRepo;
+	@MockBean private WishListModelAssembler assembler;
+	@MockBean private BtgSpecificationBuilder<WishList> builder;
 	
 	private WishList wishList, wishList2, wishList3, wishList4;
 	
@@ -61,6 +70,7 @@ public class WishListRepositoryTest {
 		wishList4 = new WishList(null, null, new Date(473040000000L));
 		repository = setupRepository(wishList, wishList2, wishList3, wishList4);
 		fmt = new SimpleDateFormat("MM/DD/YYYY");
+		when(assembler.toModel(any(WishList.class))).thenCallRealMethod();
 	}
 	
 	@Test

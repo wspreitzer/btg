@@ -50,26 +50,18 @@ public class CreditCardRestController extends BtgRestController<CreditCard> {
 	
 	@GetMapping("/rest/creditCards/")
 	public CollectionModel<EntityModel<CreditCard>> getUserCreditCards() {
-		List<CreditCard> cardList = creditCardRepo.findAll();
-		List<EntityModel<CreditCard>> cards = new ArrayList<>();
-		CollectionModel<EntityModel<CreditCard>> colModel = CollectionModel.empty();
-		if (cardList.size() > 0) {
-			for (CreditCard aCard : cardList) {
-				EntityModel<CreditCard> model = assembler.toModel(aCard);
-				cards.add(model);
-			}
-			return colModel;
-		} else {
-			throw new ResourceNotFoundException("CreditCard", builder);
-		}
-		
 		//customer = customerRepo.findAll(new BtgSpecification<Customer>(new SearchCriteria("userName", SearchOperation.EQUALITY, "userName"))).get(0);
-//		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(new BtgSpecification<CreditCard>(new SearchCriteria("customer", SearchOperation.EQUALITY, 0))).stream().map(assembler::toModel).collect(Collectors.toList());
-//		if (creditCards.size() > 0) {
-//			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCards()).withSelfRel());
-//		} else {
-//			throw new ResourceNotFoundException();
-//		}
+		List<EntityModel<CreditCard>> creditCards = creditCardRepo
+				.findAll()
+				.stream()
+				.map(assembler::toModel)
+				.collect(Collectors.toList());
+		if (creditCards.size() > 0) {
+			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class)
+					.getUserCreditCards()).withSelfRel());
+		} else {
+			throw new ResourceNotFoundException();
+		}
 	}
 	
 	@GetMapping("/rest/creditCard/{id}")
@@ -80,29 +72,14 @@ public class CreditCardRestController extends BtgRestController<CreditCard> {
 
 	@GetMapping("/rest/creditCardsBySpecification/")
 	public CollectionModel<EntityModel<CreditCard>> getUserCreditCardsBySpecification(@RequestParam(value="search") String search) throws Exception {
-		builder.with("customer", ":", 0);
 		builder = BtgUtils.buildSearchCriteria(builder, search);
-		
-		Specification<CreditCard> spec =  builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
-		List<CreditCard> cardList = creditCardRepo.findAll(spec);
-		List<EntityModel<CreditCard>> cards = new ArrayList<>();
-		CollectionModel<EntityModel<CreditCard>> colModel = CollectionModel.empty();
-		if (cardList.size() > 0) {
-			for (CreditCard aCard : cardList) {
-				EntityModel<CreditCard> model = assembler.toModel(aCard);
-				cards.add(model);
-			}
-			return colModel;
+		Specification<CreditCard> spec = builder.build(searchCriteria -> new BtgSpecification<CreditCard>((SearchCriteria) searchCriteria));
+		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(spec).stream().map(assembler::toModel).collect(Collectors.toList());
+		if(creditCards.size() > 0) {
+			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCardsBySpecification(search)).withSelfRel());
 		} else {
-			throw new ResourceNotFoundException("CreditCard", builder);
+			throw new ResourceNotFoundException("Credit Card", builder);
 		}
-		
-//		List<EntityModel<CreditCard>> creditCards = creditCardRepo.findAll(spec).stream().map(assembler::toModel).collect(Collectors.toList());
-//		if(creditCards.size() > 0) {
-//			return CollectionModel.of(creditCards, linkTo(methodOn(CreditCardRestController.class).getUserCreditCardsBySpecification(search)).withSelfRel());
-//		} else {
-//			throw new ResourceNotFoundException("Credit Card", builder);
-//		}
 	}
 	
 	@GetMapping("/rest/creditCards/count")

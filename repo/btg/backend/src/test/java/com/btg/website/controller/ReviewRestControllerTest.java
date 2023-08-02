@@ -36,6 +36,7 @@ import com.btg.website.model.Customer;
 import com.btg.website.model.Review;
 import com.btg.website.repository.CustomerRepository;
 import com.btg.website.repository.ReviewRepository;
+import com.btg.website.repository.builder.BtgSpecificationBuilder;
 import com.btg.website.util.ReviewModelAssembler;
 import com.btg.website.util.TestUtils;
 
@@ -47,8 +48,8 @@ public class ReviewRestControllerTest {
 	@MockBean private ReviewRepository reviewRepo;
 	@MockBean private ReviewModelAssembler assembler;
 	@MockBean private CustomerRepository customerRepo;
-	@Autowired
-	private MockMvc mockedRequest;
+	@MockBean private BtgSpecificationBuilder<Review> builder;
+	@Autowired private MockMvc mockedRequest;
 	
 	private TestUtils<Review> reviewUtils;
 	private Review review, review2, review3, review4;
@@ -67,6 +68,7 @@ public class ReviewRestControllerTest {
 		review3 = new Review(customer, "This Joint is Awesome", date);
 		review4 = new Review(customer, "This Place is Bad", new Date(System.currentTimeMillis()));
 		reviewList = reviewUtils.setupRepository(review, review2, review3, review4);
+		when(assembler.toModel(any(Review.class))).thenCallRealMethod();
 	}
 	
 	@Test
