@@ -387,7 +387,7 @@ public class CustomerRestControllerTest {
 		MvcResult mvcResult = mockedRequest
 				.perform(put("/btg/rest/customer/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"firstName\" : \"Patrick\", \"lastName\" : \"Kane\", \"billingAddress\" : {}, \"shippingAddress\" : {}, \"company\" : {},\"email\" : \"pkane@chicagoblackhawks.nhl.com\",\"phoneNumber\" : \"312-258-3696\", \"userName\" : \"pkane88\",\"password\" : \"P@ssw0rd\", \"signupDate\" : \"" + signUpDate + "\"}")
+				.content("{\"firstName\" : \"Patrick\", \"lastName\" : \"Kane\", \"billingAddress\" : {}, \"shippingAddress\" : {}, \"company\" : {},\"email\" : \"pkane@chicagoblackhawks.nhl.com\",\"phoneNumber\" : \"312-258-3696\", \"username\" : \"pkane88\",\"password\" : \"P@ssw0rd\", \"signupDate\" : \"" + signUpDate + "\"}")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
 			Customer foundCustomer = customerRepo.findById(1L).get();
@@ -496,7 +496,7 @@ public class CustomerRestControllerTest {
 		MvcResult mvcResult = mockedRequest
 				.perform(patch("/btg/rest/customer/3")
 						.contentType("application/json-patch+json")
-						.content("[{\"op\":\"replace\",\"path\":\"/userName\",\"value\":\"userName55\"}]")
+						.content("[{\"op\":\"replace\",\"path\":\"/username\",\"value\":\"userName55\"}]")
 						.accept("application/json-patch+json"))
 				.andExpect(status().isOk()).andReturn();
 		customer3.setUsername("userName55");

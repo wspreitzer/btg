@@ -71,36 +71,35 @@ public class Customer {
 
 
 	public Customer(String firstName, String lastName, Address billingAddress, Company company, String email, String phoneNumber,
-			String userName, String password) {
+			String username, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.billingAddress = billingAddress;
 		this.company = company;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.username = userName;
+		this.username = username;
 		this.password = password;
 	}
 	
 	public Customer(String firstName, String lastName, Address billingAddress, String email, String phoneNumber,
-			String userName, String password) {
+			String username, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.billingAddress = billingAddress;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.username = userName;
+		this.username = username;
 		this.password = password;
 	}
 	
 	public Customer(String firstName, String lastName, 
-			String email, String phoneNumber, String userName, String password) {
+			String email, String phoneNumber, String username, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.username = userName;
+		this.username = username;
 		this.password = password;
 	}
-
 }
