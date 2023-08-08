@@ -115,7 +115,7 @@ public class CustomerRestControllerTest {
 				.andExpect(jsonPath("$.lastName").value("Smith"))
 				.andExpect(jsonPath("$.email").value("bob.smith@comcast.com"))
 				.andExpect(jsonPath("$.phoneNumber").value("222-805-2222"))
-				.andExpect(jsonPath("$.userName").value("user1"))
+				.andExpect(jsonPath("$.username").value("user1"))
 				.andExpect(jsonPath("$.password").value("p@ssword"))
 				.andExpect(jsonPath("$.signupDate").value(signUpDate.toString())).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -375,7 +375,7 @@ public class CustomerRestControllerTest {
 		assertThat(foundCustomer.getLastName(), is("Kane"));
 		assertThat(foundCustomer.getEmail(), is("pkane@chicagoblackhawks.nhl.com"));
 		assertThat(foundCustomer.getPhoneNumber(), is("312-258-3696"));
-		assertThat(foundCustomer.getUserName(), is("pkane88"));
+		assertThat(foundCustomer.getUsername(), is("pkane88"));
 		assertThat(foundCustomer.getPassword(), is("p@ssw0rd"));
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
@@ -395,7 +395,7 @@ public class CustomerRestControllerTest {
 			assertThat(foundCustomer.getLastName(), is("Kane"));
 			assertThat(foundCustomer.getEmail(), is("pkane@chicagoblackhawks.nhl.com"));
 			assertThat(foundCustomer.getPhoneNumber(), is("312-258-3696"));
-			assertThat(foundCustomer.getUserName(), is("pkane88"));
+			assertThat(foundCustomer.getUsername(), is("pkane88"));
 			assertThat(foundCustomer.getPassword(), is("P@ssw0rd"));
 		System.out.println(mvcResult.getResponse().getContentAsString());		
 	}
@@ -416,7 +416,7 @@ public class CustomerRestControllerTest {
 		assertThat(foundCustomer.getLastName(), is(customer3.getLastName()));
 		assertThat(foundCustomer.getEmail(), is(customer3.getEmail()));
 		assertThat(foundCustomer.getPhoneNumber(), is(customer3.getPhoneNumber()));
-		assertThat(foundCustomer.getUserName(), is(customer3.getUserName()));
+		assertThat(foundCustomer.getUsername(), is(customer3.getUsername()));
 		assertThat(foundCustomer.getPassword(), is(customer3.getPassword()));
 		assertThat(foundCustomer.getSignupDate(), is(customer3.getSignupDate()));
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -438,7 +438,7 @@ public class CustomerRestControllerTest {
 		assertThat(foundCustomer.getLastName(), is("Towes"));
 		assertThat(foundCustomer.getEmail(), is(customer3.getEmail()));
 		assertThat(foundCustomer.getPhoneNumber(), is(customer3.getPhoneNumber()));
-		assertThat(foundCustomer.getUserName(), is(customer3.getUserName()));
+		assertThat(foundCustomer.getUsername(), is(customer3.getUsername()));
 		assertThat(foundCustomer.getPassword(), is(customer3.getPassword()));
 		assertThat(foundCustomer.getSignupDate(), is(customer3.getSignupDate()));
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -460,7 +460,7 @@ public class CustomerRestControllerTest {
 		assertThat(foundCustomer.getLastName(), is(customer3.getLastName()));
 		assertThat(foundCustomer.getEmail(), is("email@email.com"));
 		assertThat(foundCustomer.getPhoneNumber(), is(customer3.getPhoneNumber()));
-		assertThat(foundCustomer.getUserName(), is(customer3.getUserName()));
+		assertThat(foundCustomer.getUsername(), is(customer3.getUsername()));
 		assertThat(foundCustomer.getPassword(), is(customer3.getPassword()));
 		assertThat(foundCustomer.getSignupDate(), is(customer3.getSignupDate()));
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -482,7 +482,7 @@ public class CustomerRestControllerTest {
 		assertThat(foundCustomer.getLastName(), is(customer3.getLastName()));
 		assertThat(foundCustomer.getEmail(), is(customer3.getEmail()));
 		assertThat(foundCustomer.getPhoneNumber(), is("8005882300"));
-		assertThat(foundCustomer.getUserName(), is(customer3.getUserName()));
+		assertThat(foundCustomer.getUsername(), is(customer3.getUsername()));
 		assertThat(foundCustomer.getPassword(), is(customer3.getPassword()));
 		assertThat(foundCustomer.getSignupDate(), is(customer3.getSignupDate()));
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -499,13 +499,13 @@ public class CustomerRestControllerTest {
 						.content("[{\"op\":\"replace\",\"path\":\"/userName\",\"value\":\"userName55\"}]")
 						.accept("application/json-patch+json"))
 				.andExpect(status().isOk()).andReturn();
-		customer3.setUserName("userName55");
+		customer3.setUsername("userName55");
 		Customer foundCustomer = customerRepo.findById(3L).get();
 		assertThat(foundCustomer.getFirstName(), is(customer3.getFirstName()));
 		assertThat(foundCustomer.getLastName(), is(customer3.getLastName()));
 		assertThat(foundCustomer.getEmail(), is(customer3.getEmail()));
 		assertThat(foundCustomer.getPhoneNumber(), is(customer3.getPhoneNumber()));
-		assertThat(foundCustomer.getUserName(), is("userName55"));
+		assertThat(foundCustomer.getUsername(), is("userName55"));
 		assertThat(foundCustomer.getPassword(), is(customer3.getPassword()));
 		assertThat(foundCustomer.getSignupDate(), is(customer3.getSignupDate()));
 		System.out.println(mvcResult.getResponse().getContentAsString());
@@ -528,7 +528,7 @@ public class CustomerRestControllerTest {
 		assertThat(foundCustomer.getLastName(), is(customer3.getLastName()));
 		assertThat(foundCustomer.getEmail(), is(customer3.getEmail()));
 		assertThat(foundCustomer.getPhoneNumber(), is(customer3.getPhoneNumber()));
-		assertThat(foundCustomer.getUserName(), is(customer3.getUserName()));
+		assertThat(foundCustomer.getUsername(), is(customer3.getUsername()));
 		assertThat(foundCustomer.getPassword(), is("k76300"));
 		assertThat(foundCustomer.getSignupDate(), is(customer3.getSignupDate()));
 		System.out.println(mvcResult.getResponse().getContentAsString());

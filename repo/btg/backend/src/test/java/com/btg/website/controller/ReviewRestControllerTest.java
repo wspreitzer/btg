@@ -85,9 +85,8 @@ public class ReviewRestControllerTest {
 				.andExpect(jsonPath("$.customer.lastName").value("Daniels"))
 				.andExpect(jsonPath("$.customer.email").value("mason.daniels@email.com"))
 				.andExpect(jsonPath("$.customer.phoneNumber").value("224-123-3656"))
-				.andExpect(jsonPath("$.customer.userName").value("mdaniels"))
+				.andExpect(jsonPath("$.customer.username").value("mdaniels"))
 				.andExpect(jsonPath("$.customer.password").value("P@ssw0rd"))
-				.andExpect(jsonPath("$.customer.userName").value("mdaniels"))
 				.andExpect(jsonPath("$.review").value("Very good place to do business with")).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}

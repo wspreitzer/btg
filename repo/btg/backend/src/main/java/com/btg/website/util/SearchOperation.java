@@ -2,9 +2,9 @@ package com.btg.website.util;
 
 public enum SearchOperation {
 
-EQUALITY, NEGATION, GREATER_THAN, LESS_THAN, LIKE, CONTAINS, STARTS_WITH, ENDS_WITH;
+EQUALITY, NEGATION, GREATER_THAN, GREATER_THAN_EQUAL, LESS_THAN, LESS_THAN_EQUAL, LIKENESS, CONTAINS, STARTS_WITH, ENDS_WITH;
 	
-	public static final String[] SIMPLE_OPERATION_SET = {":", "!", ">", "<", "~"};
+	public static final String[] SIMPLE_OPERATION_SET = {":", "!", ">", ">=", "<=", "<", "~"};
 	
 	public static final String OR_FLAG = "'";
 	
@@ -18,23 +18,29 @@ EQUALITY, NEGATION, GREATER_THAN, LESS_THAN, LIKE, CONTAINS, STARTS_WITH, ENDS_W
 	
 	public static final String RIGHT_PAREN = ")";
 	
-	public static final SearchOperation getSimpleOpertion(char input) {
+	public static final SearchOperation getSimpleOpertion(String input) {
 		SearchOperation retVal;
 		switch(input) {
-		case ':':
+		case ":":
 			retVal = EQUALITY;
 			break;
-		case '!':
+		case "!":
 			retVal = NEGATION;
 			break;
-		case '>':
+		case ">":
 			retVal = GREATER_THAN;
 			break;
-		case '<':
+		case "<":
 			retVal = LESS_THAN;
 			break;
-		case '~':
-			retVal = LIKE;
+		case "~":
+			retVal = LIKENESS;
+			break;
+		case ">=":
+			retVal = GREATER_THAN_EQUAL;
+			break;
+		case "<=":
+			retVal = LESS_THAN_EQUAL;
 			break;
 		default:
 			retVal = null;

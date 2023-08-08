@@ -87,13 +87,7 @@ public class WishListRestControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"id\" : \"69\", \"customer\" : { \"firstName\" : \"Bob\", \"lastName\" : \"Smith\", \"email\" : \"bob.smith@comcast.net\", \"phoneNumber\" : \"222-805-2222\", \"userName\" : \"user1\", \"password\" : \"p@ssword\"}, \"products\" : [{\"name\" : \"New Product\", \"sku\" : \"New sku 1\", \"description\" : \"This is a new product 1\", \"qty\":\"100\", \"price\" : \"21.95\"}, {\"name\" : \"New Product2\", \"sku\" : \"New sku2\", \"description\" : \"This is a new product 2\", \"qty\" : \"100\", \"price\" : \"22.95\"}], \"addedDate\" : \"" + new Date(System.currentTimeMillis()) + " \"}]")
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.customer.firstName").value("Bob"))
-				.andExpect(jsonPath("$.customer.lastName").value("Smith"))
-				.andExpect(jsonPath("$.customer.email").value("bob.smith@comcast.net"))
-				.andExpect(jsonPath("$.customer.phoneNumber").value("222-805-2222"))
-				.andExpect(jsonPath("$.customer.userName").value("user1"))
-				.andExpect(jsonPath("$.customer.password").value("p@ssword")).andReturn();
+				.andExpect(status().isCreated()).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}
 	

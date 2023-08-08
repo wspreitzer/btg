@@ -20,7 +20,7 @@ public class SearchCriteria {
 	}
 	
 	public SearchCriteria(final String key, final String operation, final String prefix, final String value, final String suffix) {
-		SearchOperation op = SearchOperation.getSimpleOpertion(operation.charAt(0));
+		SearchOperation op = SearchOperation.getSimpleOpertion(operation);
 		if(op != null) {
 			if(op == SearchOperation.EQUALITY) {
 				final boolean startWithAsterisk = prefix != null && prefix.contains(SearchOperation.WILD_CARD);
@@ -40,7 +40,7 @@ public class SearchCriteria {
 	}
 	
 	public SearchCriteria(final String orPredicate, final String key, final String operation, final String prefix, final String value, final String suffix) {
-		SearchOperation op = SearchOperation.getSimpleOpertion(operation.charAt(0));
+		SearchOperation op = SearchOperation.getSimpleOpertion(operation);
 		if(op != null) {
 			if(op == SearchOperation.EQUALITY) {
 				final boolean startWithAsterisk = prefix != null && prefix.contains(SearchOperation.WILD_CARD);

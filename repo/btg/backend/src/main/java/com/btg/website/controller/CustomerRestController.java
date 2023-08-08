@@ -99,26 +99,14 @@ public class CustomerRestController extends BtgRestController<Customer> {
 
 	@GetMapping("/admin/rest/customers")
 	public CollectionModel<EntityModel<Customer>> getCustomers() {
-		List<Customer> customerList = customerRepo.findAll();
-		List<EntityModel<Customer>> customers = new ArrayList<>();
-		CollectionModel<EntityModel<Customer>> colModel = CollectionModel.empty();
-		if(customerList.size() > 0 ) {
-			for (Customer aCustomer : customerList) {
-				EntityModel<Customer> model = assembler.toModel(aCustomer);
-				customers.add(model);
-			}
-			return colModel;
+		List<EntityModel<Customer>> customers = customerRepo.findAll().stream().map(assembler::toModel)
+				.collect(toList());
+		if (customers.size() > 0) {
+			return CollectionModel.of(customers,
+					linkTo(methodOn(CustomerRestController.class).getCustomers()).withSelfRel());
 		} else {
 			throw new ResourceNotFoundException();
 		}
-//		List<EntityModel<Customer>> customers = customerRepo.findAll().stream().map(assembler::toModel)
-//				.collect(toList());
-//		if (customers.size() > 0) {
-//			return CollectionModel.of(customers,
-//					linkTo(methodOn(CustomerRestController.class).getCustomers()).withSelfRel());
-//		} else {
-//			throw new ResourceNotFoundException();
-//		}
 	}
 
 	@GetMapping("/rest/customerSearch")
@@ -127,33 +115,18 @@ public class CustomerRestController extends BtgRestController<Customer> {
 		builder = BtgUtils.buildSearchCriteria(builder, search);
 		Specification<Customer> spec = builder
 				.build(searchCriteria -> new BtgSpecification<Customer>((SearchCriteria) searchCriteria));
-		
-		List<Customer> customerList = customerRepo.findAll(spec);
-		List<EntityModel<Customer>> customers = new ArrayList<>();
-		CollectionModel<EntityModel<Customer>> colModel = CollectionModel.empty();
-		if (customerList.size() > 0) {
-			for (Customer aCustomer : customerList) {
-				EntityModel<Customer> model = assembler.toModel(aCustomer);
-				customers.add(model);
-			}
-			return colModel;
-		} else {
-			throw new ResourceNotFoundException("Customer", builder);
-		}
+		  List<EntityModel<Customer>> customers = customerRepo
+				  .findAll(spec)
+				  .stream().map(assembler::toModel)
+				  .collect(toList()); 
+		  if (customers.size() > 0) { 
+			  return CollectionModel.of(
+					  customers, linkTo(methodOn(CustomerRestController.class)
+							  .getCustomersBySpecification(search))
+					  				.withSelfRel()); } else { throw new
+					  					ResourceNotFoundException("Customer", builder); }
+		 
 	}
-
-//		  List<EntityModel<Customer>> customers = customerRepo
-//				  .findAll(spec)
-//				  .stream().map(assembler::toModel)
-//				  .collect(toList()); 
-//		  if (customers.size() > 0) { 
-//			  return CollectionModel.of(
-//					  customers, linkTo(methodOn(CustomerRestController.class)
-//							  .getCustomersBySpecification(search))
-//					  				.withSelfRel()); } else { throw new
-//					  					ResourceNotFoundException("Customer", builder); }
-//		 
-//	}
 
 	@PutMapping("/rest/customer/{id}")
 	public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
@@ -166,7 +139,7 @@ public class CustomerRestController extends BtgRestController<Customer> {
 			foundCustomer.setCompany(customer.getCompany());
 			foundCustomer.setEmail(customer.getEmail());
 			foundCustomer.setPhoneNumber(customer.getPhoneNumber());
-			foundCustomer.setUserName(customer.getUserName());
+			foundCustomer.setUsername(customer.getUsername());
 			foundCustomer.setPassword(customer.getPassword());
 			foundCustomer.setSignupDate(customer.getSignupDate());
 			foundCustomer.setWishList(customer.getWishList());

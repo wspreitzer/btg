@@ -32,9 +32,9 @@ public class BtgSpecificationBuilder<T> {
 		
 	public BtgSpecificationBuilder<T> with(final String orIndicator, final String key, 
 			final String operation, final Object value, final String prefix, final String suffix) {
-		SearchOperation op = SearchOperation.getSimpleOpertion(operation.charAt(0));
+		SearchOperation op = SearchOperation.getSimpleOpertion(operation);
 		if(op != null) {
-			if (op == SearchOperation.EQUALITY) {
+			if (op == SearchOperation.LIKENESS) {
 				final boolean startWithAsterisk = prefix != null && prefix.contains(SearchOperation.WILD_CARD);
 				final boolean endWithAsterisk = suffix != null && suffix.contains(SearchOperation.WILD_CARD);
 				if (startWithAsterisk && endWithAsterisk) {
@@ -65,8 +65,8 @@ public class BtgSpecificationBuilder<T> {
 			final List<Specification<T>> specs = params.stream()
 					.map(converter)
 					.collect(Collectors.toCollection(ArrayList::new));
-			result = specs.get(0);
-			for(int i = 1; i < specs.size(); i++) {
+			result = null;
+			for(int i = 0; i < specs.size(); i++) {
 				result = params.get(i)
 						.isOrPredicate()
 						? Specification.where(result)

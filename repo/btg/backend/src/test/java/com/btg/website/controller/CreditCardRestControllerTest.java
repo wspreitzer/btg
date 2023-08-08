@@ -119,7 +119,7 @@ public class CreditCardRestControllerTest {
 				.andExpect(jsonPath("$.customer.lastName").value("Smith"))
 				.andExpect(jsonPath("$.customer.email").value("bob.smith@comcast.net"))
 				.andExpect(jsonPath("$.customer.phoneNumber").value("312-781-1916"))
-				.andExpect(jsonPath("$.customer.userName").value("user1"))
+				.andExpect(jsonPath("$.customer.username").value("user1"))
 				.andExpect(jsonPath("$.customer.password").value("P@ssword"))
 				.andExpect(jsonPath("$.customer.signupDate").value(customer.getSignupDate().toString()))
 				.andExpect(jsonPath("$.type").value("Discover"))

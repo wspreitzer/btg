@@ -93,7 +93,7 @@ public class SupportTicketRestControllerTest {
 				.andExpect(jsonPath("$.customer.lastName").value("Smith"))
 				.andExpect(jsonPath("$.customer.email").value("bob.smith@comcast.net"))
 				.andExpect(jsonPath("$.customer.phoneNumber").value("222-805-2222"))
-				.andExpect(jsonPath("$.customer.userName").value("user1"))
+				.andExpect(jsonPath("$.customer.username").value("user1"))
 				.andExpect(jsonPath("$.customer.password").value("p@ssword")).andReturn();
 		System.out.println(mvcResult.getResponse().getContentAsString());
 	}

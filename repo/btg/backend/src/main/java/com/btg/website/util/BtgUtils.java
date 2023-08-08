@@ -13,7 +13,7 @@ public class BtgUtils {
 	//@Value("${btg.search.regex}")
 	//private String regex;
 
-	private static String regex = "(\\p{Punct}?)(\\w+?)(:|!|<|>)(\\p{Punct}?)([\\w\\s]+)(\\p{Punct}?),";
+	private static String regex = "(\\p{Punct}?)(\\w+?)(>=|<=|~|:|!|<|>)(\\p{Punct}?)([\\w\\s]+)(\\p{Punct}?),";
 	
 	public static String createExceptionMessage(String entity, Long id) {
 		StringBuilder sb = new StringBuilder();

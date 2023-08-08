@@ -7,14 +7,24 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer {
 
 	@Id
@@ -43,14 +53,14 @@ public class Customer {
 	
 	@Column(name="phone_number")
 	private String phoneNumber;
-	private String userName;
+	private String username;
 	private String password;
 
 	@Column(name="sign_up_date")
 	private Date signupDate;
 	
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "wish_list", referencedColumnName = "id")
+	@JoinColumn(name = "wish_list", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_customer_wish_list_id"))
 	private WishList wishList;
 	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -68,7 +78,7 @@ public class Customer {
 		this.company = company;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.userName = userName;
+		this.username = userName;
 		this.password = password;
 	}
 	
@@ -79,7 +89,7 @@ public class Customer {
 		this.billingAddress = billingAddress;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.userName = userName;
+		this.username = userName;
 		this.password = password;
 	}
 	
@@ -89,137 +99,8 @@ public class Customer {
 		this.lastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.userName = userName;
+		this.username = userName;
 		this.password = password;
 	}
 
-	public Customer() {}
-
-	public Long getId() {
-		return this.id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return this.lastName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Address getBillingAddress() {
-		return this.billingAddress;
-	}
-	
-	public void setBillingAddress(Address billingAddress) {
-		this.billingAddress = billingAddress;
-	}
-	
-	public Address getShippingAddress() {
-		return this.shippingAddress;
-	}
-	
-	public void setShippingAddress(Address shippingAddress) {
-		this.shippingAddress = shippingAddress;
-	}
-	
-	public Company getCompany() {
-		return this.company;
-	}
-	
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-	
-	public String getEmail() {
-		return this.email;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getPhoneNumber() {
-		return this.phoneNumber;
-	}
-	
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-	
-	public String getUserName() {
-		return this.userName;
-	}
-	
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	
-	public String getPassword() {
-		return this.password;
-	}
-	
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public Date getSignupDate() {
-		return this.signupDate;
-	}
-	
-	public void setSignupDate(Date signupDate) {
-		this.signupDate = signupDate;
-	}
-
-	public WishList getWishList() {
-		return this.wishList;
-	}
-	
-	public void setWishList(WishList wishList) {
-		this.wishList = wishList;
-	}
-
-	public List<CreditCard> getCreditCards() {
-		return creditCards;
-	}
-
-	public void setCreditCards(List<CreditCard> creditCards) {
-		this.creditCards = creditCards;
-	}
-	
-	public void addReview(Review review) {
-		reviews.add(review);
-		review.setCustomer(this);
-	}
-	
-	public void removeReview(Review review) {
-		reviews.remove(review);
-		review.setReview(null);
-	}
-
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
 }
